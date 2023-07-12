@@ -3,8 +3,12 @@ import { collapsed, toggleSidebar, sidebarWidth } from "./state";
 import SidebarLink from "./SidebarLink.vue";
 import mqtt from "mqtt/dist/mqtt";
 import { ref } from "vue";
+import { mapState } from "vuex";
 
 export default {
+  computed: {
+    ...mapState(["user"]),
+  },
   props: {},
   components: { SidebarLink },
   setup() {
@@ -28,7 +32,6 @@ export default {
   },
 
   async mounted() {
-    console.log(!this.checkFlag());
     if (!this.checkFlag()) {
       this.setFlag();
       console.log(this.checkFlag());
@@ -92,6 +95,8 @@ export default {
     </h1>
 
     <br /><br /><br />
+    {{ user }}
+    <br /><br /><br /><br /><br /><br />
     <SidebarLink to="/analytics">analytics</SidebarLink>
     <br />
     <SidebarLink to="/alert">alert</SidebarLink>

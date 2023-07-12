@@ -47,6 +47,8 @@ export default {
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("email", res.data.email);
             sessionStorage.setItem("ruolo", decrypt(res.data.ruolo));
+            this.$store.commit("setUser", decrypt(res.data.email));
+
             this.$router.push("/memos");
           } else {
             alert("errore! controllare le credenziali inserite");

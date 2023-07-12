@@ -17,9 +17,13 @@ if (localStorage.getItem('vuex-state')) {
 
 const store = createStore({
   state: {
-    ...initialState
+    ...initialState,
+    user: null
   },
   mutations: {
+    setUser(state, user) {
+      state.user = user;
+    },
     setSelectedItem(state, item) {
       state.selectedItem = item;
       sessionStorage.setItem('vuex-state', JSON.stringify(state));
