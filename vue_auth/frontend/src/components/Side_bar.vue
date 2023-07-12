@@ -8,6 +8,14 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState(["user"]),
+    userLine1() {
+      // Split the user string into two lines
+      return this.user ? this.user.substring(0, 10) : "";
+    },
+    userLine2() {
+      // Split the user string into two lines
+      return this.user ? this.user.substring(10) : "";
+    },
   },
   props: {},
   components: { SidebarLink },
@@ -76,6 +84,13 @@ export default {
 <template>
   <div class="sidebar" :style="{ width: sidebarwidth }">
     <br />
+    <div style="font-size: x-large; font: 400px; font-style: italic">
+      {{ userLine1 }}
+      <br />
+      {{ userLine2 }}
+    </div>
+    <br />
+    <br /><br />
     <h1>
       <span v-if="collapsed">
         <div class="scritta">
@@ -91,12 +106,11 @@ export default {
           <div>S</div>
         </div>
       </span>
+
       <span v-else>&nbsp;Menù</span>
     </h1>
 
     <br /><br /><br />
-    {{ user }}
-    <br /><br /><br /><br /><br /><br />
     <SidebarLink to="/analytics">analytics</SidebarLink>
     <br />
     <SidebarLink to="/alert">alert</SidebarLink>
