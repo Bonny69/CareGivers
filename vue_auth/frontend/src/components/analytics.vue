@@ -9,8 +9,8 @@
 <script>
 /* eslint-disable vue/multi-word-component-names */
 import Chart from "chart.js";
-import fc from "./fcLineChart";
 import spO2 from "./spO2LineChart";
+import fc from "./fcLineChart";
 import bp from "./BPLineChart";
 import axios from "axios";
 import { encrypt, decrypt } from "./cipher";
@@ -19,8 +19,8 @@ export default {
   name: "line",
   data() {
     return {
-      fc: fc,
       spO2: spO2,
+      fc: fc,
       bp: bp,
       client: null,
       topicPV: sessionStorage.getItem("email_paziente") + "/pv",
@@ -122,15 +122,27 @@ export default {
       let data = {
         email: indirizzo,
       };
-      axios.post("http://localhost:5005/getAlerts", data).then((res) => {
-        if (res.status === 200 && res.data.fc!= null && res.data.spO2!=null && res.data.systolic != null && res.data.diastolic != null) {
-          localStorage.setItem("fcth", decrypt(res.data.fc));
-          localStorage.setItem("spO2th", decrypt(res.data.spO2));
-          localStorage.setItem("systh", decrypt(res.data.systolic));
-          localStorage.setItem("diasth", decrypt(res.data.diastolic));
-          console.log("settaggio alert corretto");
+      axios.post("http://localhost:5005/getAlerts", data).then(
+        (res) => {
+          if (
+            res.status === 200 &&
+            res.data.fc != null &&
+            res.data.spO2 != null &&
+            res.data.systolic != null &&
+            res.data.diastolic != null
+          ) {
+            localStorage.setItem("fcth", decrypt(res.data.fc));
+            localStorage.setItem("spO2th", decrypt(res.data.spO2));
+            localStorage.setItem("systh", decrypt(res.data.systolic));
+            localStorage.setItem("diasth", decrypt(res.data.diastolic));
+            console.log("settaggio alert corretto");
+          }
+        },
+        (err) => {
+          console.log(err);
+          alert("nessuna soglia inserita!");
         }
-      });
+      );
     },
 
     async fetchData(param) {

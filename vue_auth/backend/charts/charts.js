@@ -76,8 +76,11 @@ database();
 
         const result = await collection.findOne({patient: req.body.email})
         console.log(result)
-        res.status(200).json(result)
-        
+        if(result){
+          res.status(200).json(result)
+        }else{
+          res.status(400).json()
+        }
       } catch (error) {
         console.log(error)
       }
