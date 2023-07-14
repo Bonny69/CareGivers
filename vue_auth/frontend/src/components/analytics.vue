@@ -331,4 +331,10 @@ export default {
   flex-direction: column;
   gap: 70px; /* Adjust the gap value as needed */
 }
+
+canvas {
+  background-color: #f2f2f2;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+}
 </style>
