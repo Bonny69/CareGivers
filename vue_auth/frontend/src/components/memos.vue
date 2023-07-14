@@ -1,111 +1,96 @@
 <template>
-  <body>
-    <div class="wrapper">
-      <div class="container-farmaci">
-        <div class="heading-farmaci">
-          <h3>FARMACI</h3>
-          <hr style="width: 100%" color="black" />
-        </div>
-        <!-- input -->
-        <div class="insert" v-if="!isPatient()">
-          <input
-            type="text"
-            v-model="farmaco"
-            placeholder="Aggiungi farmaco..."
-          />&nbsp;
-          <input
-            type="number"
-            v-model="dosaggio"
-            placeholder="Dosaggio (mg)"
-          />&nbsp;
-          <input type="time" v-model="farmacOrario" />
-          <button @click="SubmitDrug" class="add-btn-farmaci">AGGIUNGI</button>
-        </div>
-        <!-- table -->
-        <div class="table-container-farmaci">
-          <table border="{3}" class="table-farmaci">
-            <thead>
-              <tr>
-                <th>Farmaco</th>
-                <th>Dosaggio (mg)</th>
-                <th>Orario</th>
-                <th v-if="!isPatient()">Elimina</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(task, index) in terapia"
-                :key="index"
-                :class="{ 'blue-bg': task.reminderDate === today }"
-              >
-                <td>{{ task.farmaco }}</td>
-                <td>{{ task.dosaggio }}</td>
-                <td>{{ task.orario }}</td>
-                <td v-if="!isPatient()">
-                  <href
-                    class="del-btn"
-                    style="border-radius: 4px"
-                    @click="deleteDrug(index)"
-                  >
-                    Elimina
-                  </href>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <div class="wrapper">
+    <div class="container-farmaci">
+      <div class="heading-farmaci">
+        <h3>FARMACI</h3>
+        <br />
+        <hr />
       </div>
-      <div class="container-task">
-        <div class="heading-task">
-          <h3>PROMEMORIA</h3>
-          <hr style="width: 100%" color="black" />
-        </div>
-        <!-- input -->
-        <div class="insert" v-if="!isPatient()">
-          <input
-            type="text"
-            v-model="task"
-            placeholder="Aggiungi promemoria..."
-          />&nbsp; <input type="date" v-model="reminderDate" />&nbsp;
-          <input type="time" v-model="reminderTime" />
-          <button @click="SubmitTask" class="add-btn-task">AGGIUNGI</button>
-        </div>
-        <!-- table -->
-        <div class="table-container-task">
-          <table border="{3}" class="table-task">
-            <thead>
-              <tr>
-                <th>Evento</th>
-                <th>Data</th>
-                <th>Orario</th>
-                <th v-if="!isPatient()">Elimina</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(task, index) in tasks"
-                :key="index"
-                :class="{ 'blue-bg': task.reminderDate === today }"
-              >
-                <td>{{ task.evento }}</td>
-                <td>{{ task.data }}</td>
-                <td>{{ task.orario }}</td>
-                <td v-if="!isPatient()">
-                  <href
-                    class="del-btn"
-                    style="border-radius: 4px"
-                    @click="deleteTask(index)"
-                  >
-                    Elimina
-                  </href>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="insert" v-if="!isPatient()">
+        <input
+          type="text"
+          v-model="farmaco"
+          placeholder="Aggiungi farmaco..."
+        />
+        <input type="number" v-model="dosaggio" placeholder="Dosaggio (mg)" />
+        <input type="time" v-model="farmacOrario" />
+        <button @click="SubmitDrug" class="add-btn-farmaci">AGGIUNGI</button>
+      </div>
+      <div class="table-container-farmaci">
+        <table class="table-farmaci">
+          <thead>
+            <tr>
+              <th>Farmaco</th>
+              <th>Dosaggio (mg)</th>
+              <th>Orario</th>
+              <th v-if="!isPatient()">Elimina</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(task, index) in terapia"
+              :key="index"
+              :class="{ 'blue-bg': task.reminderDate === today }"
+            >
+              <td>{{ task.farmaco }}</td>
+              <td>{{ task.dosaggio }}</td>
+              <td>{{ task.orario }}</td>
+              <td v-if="!isPatient()">
+                <button class="del-btn" @click="deleteDrug(index)">
+                  Elimina
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </body>
+    <div class="container-task">
+      <div class="heading-task">
+        <h3>PROMEMORIA</h3>
+        <br />
+        <hr />
+      </div>
+      <div class="insert" v-if="!isPatient()">
+        <input
+          type="text"
+          v-model="task"
+          placeholder="Aggiungi promemoria..."
+        />
+        <input type="date" v-model="reminderDate" />
+        <input type="time" v-model="reminderTime" />
+        <button @click="SubmitTask" class="add-btn-task">AGGIUNGI</button>
+      </div>
+      <div class="table-container-task">
+        <table class="table-task">
+          <thead>
+            <tr>
+              <th>Evento</th>
+              <th>Data</th>
+              <th>Orario</th>
+              <th v-if="!isPatient()">Elimina</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(task, index) in tasks"
+              :key="index"
+              :class="{ 'blue-bg': task.reminderDate === today }"
+            >
+              <td>{{ task.evento }}</td>
+              <td>{{ task.data }}</td>
+              <td>{{ task.orario }}</td>
+              <td v-if="!isPatient()">
+                <button class="del-btn" @click="deleteTask(index)">
+                  Elimina
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -593,113 +578,90 @@ export default {
   margin-top: -220px;
 }
 
-.heading-farmaci {
-  font-weight: bold;
-  margin-bottom: 30px;
-  color: #c79598;
-}
-
+.heading-farmaci,
 .heading-task {
   font-weight: bold;
   margin-bottom: 30px;
-  color: darkgoldenrod;
+  color: #c79598;
+  text-align: center;
 }
 
-.del-btn {
-  background-color: #88474c;
+hr {
+  border: none;
+  border-top: 1px solid black;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+.del-btn,
+.add-btn-farmaci,
+.add-btn-task {
+  border: none;
+  width: 100px;
+  height: 30px;
+  padding: 2px;
+  background-color: #77b631;
   color: white;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  margin-left: 30px;
+  transition: o.25s;
+  cursor: pointer;
 }
 
-.container-farmaci {
-  width: 1300px;
-  margin-left: 250px;
-  text-align: center;
-  margin-top: 150px;
+.del-btn:hover,
+.add-btn-farmaci:hover,
+.add-btn-task:hover {
+  background-color: #568d21;
 }
 
+.container-farmaci,
 .container-task {
-  width: 1300px;
-  margin-left: 250px;
+  width: 1100px;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 120px;
+  margin-left: 150px;
 }
 
-.table-container-farmaci {
-  max-height: 200px;
-  overflow-y: scroll;
-}
-
+.table-container-farmaci,
 .table-container-task {
   max-height: 200px;
-  overflow-y: scroll;
-}
-
-.table-farmaci {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+  overflow-y: auto;
   margin-top: 20px;
-  background-color: #c79598;
+  width: 1100px; /* Set the width to 100% */
 }
 
+.table-farmaci,
 .table-task {
-  font-family: arial, sans-serif;
+  font-family: Arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  margin-top: 20px;
-  background-color: palegoldenrod;
 }
 
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: center;
+.table-farmaci th,
+.table-task th {
+  background-color: #c79598;
+  color: white;
   padding: 8px;
+  text-align: center;
+  border: 1px solid #dddddd;
+  font-weight: bold; /* Increase font weight */
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-
-button:hover {
-  background-color: #9e331d;
+.table-farmaci td,
+.table-task td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #dddddd;
 }
 
 .blue-bg {
   background-color: blue;
 }
 
-.add-btn-farmaci {
-  border: none;
-  width: 100px;
-  height: 30px;
-  padding: 2px;
-  background-color: grey;
-  color: white;
-  margin-left: 50px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  transition: o.25s;
-  cursor: pointer;
-}
-
-.add-btn-task {
-  border: none;
-  width: 100px;
-  height: 30px;
-  padding: 2px;
-  background-color: grey;
-  color: white;
-  margin-left: 50px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  transition: o.25s;
-  cursor: pointer;
-}
-
-.edit-btn {
-  border: none;
-  background-color: #77b631;
-  color: white;
+/* Add spacing between input fields */
+.insert input {
+  margin-bottom: 10px;
+  margin-left: 15px;
 }
 </style>
