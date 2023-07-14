@@ -1,5 +1,7 @@
 <template>
-  <div class="header"><h1>Seleziona un paziente</h1></div>
+  <div class="header">
+    <h1>Seleziona un paziente</h1>
+  </div>
   <div class="container">
     <div class="patient-boxes">
       <div
@@ -9,9 +11,11 @@
         :class="{ selected: patient === selectedPatient }"
         @click="selectPatient(patient)"
       >
-        <span class="name">{{ patient.name }}</span>
-        <span class="surname">{{ patient.surname }}</span>
-        <span class="email">{{ patient.email }}</span>
+        <div class="info">
+          <div class="name">{{ patient.name }}</div>
+          <div class="surname">{{ patient.surname }}</div>
+          <div class="email">{{ patient.email }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -99,6 +103,7 @@ export default {
   justify-content: flex-start;
   margin-top: -140px;
 }
+
 .header {
   display: flex;
   flex-direction: column;
@@ -110,34 +115,6 @@ export default {
 h1 {
   margin-bottom: 0;
 }
-.patient-box {
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  padding: 70px;
-}
-
-.name {
-  margin-bottom: 18px;
-  font-weight: bold;
-  font-size: x-large;
-}
-.surname {
-  margin-bottom: 23px;
-  font-weight: bold;
-  font-size: x-large;
-}
-.email {
-  margin-bottom: -20px;
-  font-style: italic;
-  font-size: x-large;
-}
-
-.patient-boxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 60px;
-}
 
 .patient-box {
   width: 270px;
@@ -147,9 +124,45 @@ h1 {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.patient-box.selected {
+.patient-box:hover {
+  background-color: lightyellow;
+}
+
+.patient-box:active {
   background-color: lightgreen;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.name {
+  font-weight: bold;
+  font-size: x-large;
+  margin-bottom: 10px;
+}
+
+.surname {
+  font-weight: bold;
+  font-size: x-large;
+  margin-bottom: 10px;
+}
+
+.email {
+  font-style: italic;
+  font-size: x-large;
+}
+
+.patient-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 60px;
 }
 </style>
