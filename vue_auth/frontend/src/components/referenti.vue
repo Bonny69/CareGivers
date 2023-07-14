@@ -84,11 +84,11 @@ export default {
   },
 
   created() {
-    window.addEventListener("beforeunload", this.handleBeforeUnload);
-    if (localStorage.getItem("token") === null) {
+    if (sessionStorage.getItem("token") === null) {
       alert("non autorizzato");
       this.$router.push("/login");
     }
+    window.addEventListener("beforeunload", this.handleBeforeUnload);
   },
   beforeUnmount() {
     window.removeEventListener("beforeunload", this.handleBeforeUnload);

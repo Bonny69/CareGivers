@@ -19,7 +19,7 @@
 
 <script>
 import axios from "axios";
-import { decrypt } from "./cipher";
+import { decrypt, encrypt } from "./cipher";
 
 export default {
   name: "Home",
@@ -82,7 +82,7 @@ export default {
 
     selectPatient(patientId) {
       this.selectedPatient = patientId;
-      const selectedPatientEmail = patientId.email;
+      const selectedPatientEmail = encrypt(patientId.email);
       sessionStorage.setItem("email_paziente", selectedPatientEmail);
       sessionStorage.setItem("flagScelta", 1);
       this.$router.push("/memos");

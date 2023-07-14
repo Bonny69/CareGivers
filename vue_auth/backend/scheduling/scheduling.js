@@ -72,8 +72,9 @@ const database = async () => {
   app.get('/getMemos', async (req,res) => {
     //console.log('DENTRO GET-MEMO SERVER')
     const { Memo } = require('./schedule.js')
+    console.log(req.query.email)
     try {
-      const documents = await Memo.find({email: req.body.email});
+      const documents = await Memo.find({paziente: req.query.email});
       //console.log(documents)
       res.json(documents)
     } catch (error) {
@@ -112,9 +113,10 @@ const database = async () => {
   app.get('/getTherapy', async (req,res) => {
     console.log('DENTRO GET-Therapy SERVER')
     const { terapia } = require('./therapy.js')
+    console.log(req.query.email)
 
     try { 
-      const documents = await terapia.find({email: req.body.email});
+      const documents = await terapia.find({paziente: req.query.email});
       //console.log(documents)
       res.json(documents)
     } catch (error) {

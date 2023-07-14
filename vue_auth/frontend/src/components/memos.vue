@@ -311,7 +311,7 @@ export default {
     async setup() {
       this.client = this.$store.state.selectedItem;
       if (this.isPatient()) {
-        console.log(this.topicDrug + " TOPIC drug");
+        console.log(decrypt(sessionStorage.getItem("email")));
         this.getMemos(sessionStorage.getItem("email"));
         this.getFarmaci(sessionStorage.getItem("email"));
         if (this.checkFlag()) {
@@ -375,6 +375,7 @@ export default {
         }
         this.setFlag();
       } else {
+        console.log(sessionStorage.getItem("email_paziente"));
         this.getMemos(sessionStorage.getItem("email_paziente"));
         this.getFarmaci(sessionStorage.getItem("email_paziente"));
 
@@ -547,7 +548,7 @@ export default {
     async getMemos(email_) {
       const email = { email: email_ };
       await axios
-        .get("http://localhost:5002/getMemos", email)
+        .get("http://localhost:5002/getMemos", { params: email })
         .then((response) => {
           const documents = response.data;
 
@@ -566,7 +567,7 @@ export default {
       const email = { email: email_ };
 
       await axios
-        .get("http://localhost:5002/getTherapy", email)
+        .get("http://localhost:5002/getTherapy", { params: email })
         .then((response) => {
           const documents = response.data;
 
