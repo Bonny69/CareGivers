@@ -79,6 +79,14 @@ export default {
     if (sessionStorage.getItem("token") === null) {
       alert("non autorizzato");
       this.$router.push("/login");
+    } else {
+      if (
+        sessionStorage.getItem("ruolo") === "caregiver" &&
+        sessionStorage.getItem("flagScelta") === null
+      ) {
+        alert("selezionare un paziente");
+        this.$router.push("/home");
+      }
     }
   },
   beforeUnmount() {

@@ -142,7 +142,16 @@ export default {
     if (sessionStorage.getItem("token") === null) {
       alert("non autorizzato");
       this.$router.push("/login");
+    } else {
+      if (
+        sessionStorage.getItem("ruolo") === "caregiver" &&
+        sessionStorage.getItem("flagScelta") === null
+      ) {
+        alert("selezionare un paziente");
+        this.$router.push("/home");
+      }
     }
+
     window.addEventListener("beforeunload", this.handleBeforeUnload);
   },
   beforeUnmount() {
@@ -366,7 +375,6 @@ export default {
         }
         this.setFlag();
       } else {
-        await this.getEmailPaziente();
         this.getMemos(sessionStorage.getItem("email_paziente"));
         this.getFarmaci(sessionStorage.getItem("email_paziente"));
 
@@ -391,29 +399,6 @@ export default {
           this.$store.dispatch("updateSelectedItem", this.client);
         }
       }
-    },
-
-    getEmailPaziente() {
-      return new Promise((resolve) => {
-        const data = {
-          email: sessionStorage.getItem("email"),
-        };
-        console.log(sessionStorage.getItem("email") + " email caregiver");
-        try {
-          axios
-            .post("http://localhost:5002/getEmailPatient", data)
-            .then((res) => {
-              if (res.status === 200) {
-                console.log(res.data.patient + " email paziente associato");
-                sessionStorage.setItem("email_paziente", res.data.patient);
-                resolve();
-              }
-            });
-        } catch (err) {
-          console.log(err);
-          alert("nessun paziente associato");
-        }
-      });
     },
 
     setAlertTaskFromMqtt(message) {

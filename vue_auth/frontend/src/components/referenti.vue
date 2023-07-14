@@ -24,7 +24,7 @@
       <input type="submit" @click="sendOtp()" value="CONFERMA" />
     </div>
 
-    <div class="threeshold" v-if="!isPatient()">
+    <div class="threeshold" v-if="!isPatient() && hasChosenPatient()">
       <div>
         <h3 style="color: #c35b46">ALERTS</h3>
         <hr style="width: 100%" color="#9e331d" />
@@ -105,6 +105,9 @@ export default {
     },
     isPatient() {
       return this.ruolo === "paziente";
+    },
+    hasChosenPatient() {
+      return sessionStorage.getItem("flagScelta") === 1;
     },
     setFlag() {
       sessionStorage.setItem("flagref", 1);

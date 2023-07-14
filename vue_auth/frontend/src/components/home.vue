@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Select a Patient</h1>
+  <div class="header"><h1>Seleziona un paziente</h1></div>
+  <div class="container">
     <div class="patient-boxes">
       <div
         v-for="patient in patients"
@@ -9,8 +9,9 @@
         :class="{ selected: patient === selectedPatient }"
         @click="selectPatient(patient)"
       >
-        <span>{{ patient.name }} {{ patient.surname }}</span>
-        <span>{{ patient.email }}</span>
+        <span class="name">{{ patient.name }}</span>
+        <span class="surname">{{ patient.surname }}</span>
+        <span class="email">{{ patient.email }}</span>
       </div>
     </div>
   </div>
@@ -45,10 +46,14 @@ export default {
 
           const documents = response.data;
           for (let i = 0; i < documents.length; i++) {
-            console.log(decrypt(documents[i].patient));
+            //console.log(decrypt(documents[i].patient));
             const info = await this.getInfo(documents[i].patient);
-            console.log(info);
-            this.patients.push(decrypt(documents[i].patient));
+            const patient = {
+              name: info.nome.toUpperCase(),
+              surname: info.cognome.toUpperCase(),
+              email: decrypt(documents[i].patient),
+            };
+            this.patients.push(patient);
           }
         })
         .catch((error) => {
@@ -76,24 +81,67 @@ export default {
     },
 
     selectPatient(patientId) {
-      // Update the selected patient and fetch their data
       this.selectedPatient = patientId;
-      this.fetchPatientData();
+      const selectedPatientEmail = patientId.email;
+      sessionStorage.setItem("email_paziente", selectedPatientEmail);
+      sessionStorage.setItem("flagScelta", 1);
+      this.$router.push("/memos");
     },
   },
 };
 </script>
 
 <style>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: -140px;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 250px;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+.patient-box {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 70px;
+}
+
+.name {
+  margin-bottom: 18px;
+  font-weight: bold;
+  font-size: x-large;
+}
+.surname {
+  margin-bottom: 23px;
+  font-weight: bold;
+  font-size: x-large;
+}
+.email {
+  margin-bottom: -20px;
+  font-style: italic;
+  font-size: x-large;
+}
+
 .patient-boxes {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 60px;
 }
 
 .patient-box {
-  width: 200px;
-  height: 100px;
+  width: 270px;
+  height: 200px;
   background-color: lightblue;
   display: flex;
   align-items: center;
