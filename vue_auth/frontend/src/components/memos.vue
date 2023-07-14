@@ -598,6 +598,7 @@ hr {
 .add-btn-task {
   border: none;
   width: 100px;
+  margin-top: 15px;
   height: 30px;
   padding: 2px;
   background-color: #77b631;
@@ -615,7 +616,12 @@ hr {
   background-color: #568d21;
 }
 
-.container-farmaci,
+.container-farmaci {
+  width: 1100px;
+  text-align: center;
+  margin-top: 260px;
+  margin-left: 150px;
+}
 .container-task {
   width: 1100px;
   text-align: center;
@@ -628,7 +634,7 @@ hr {
   max-height: 200px;
   overflow-y: auto;
   margin-top: 20px;
-  width: 1100px; /* Set the width to 100% */
+  width: 1100px;
 }
 
 .table-farmaci,
