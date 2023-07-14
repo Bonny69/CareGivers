@@ -55,7 +55,23 @@ app.post('/signup', async (req, res) => {
       message: "ERROR"
       })
     }
-}) ;
+});
+
+app.post('/user', async(req,res)=>{
+  const { user } = require('./user.js')
+  try {
+    const info = await user.findOne({email: req.body.email})
+    if(info){
+      res.status(200).json({
+        nome: info.nome,
+        cognome: info.cognome
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json();
+  }
+})
 
 
 
@@ -91,7 +107,9 @@ app.post('/login',  async(req,res) =>{
       message: 'login avvenuto correttamente',
       token: token,
       email: User.email,
-      ruolo: User.ruolo
+      ruolo: User.ruolo,
+      nome: User.nome,
+      cognome: User.cognome
     })
 
   } catch (error) {
