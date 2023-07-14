@@ -323,6 +323,7 @@ export default {
 
 <style>
 .chart-container {
+  margin-top: 120px;
   width: 900px;
   height: 800px;
   font-size: large;
