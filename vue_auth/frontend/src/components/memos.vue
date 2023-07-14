@@ -11,10 +11,22 @@
           type="text"
           v-model="farmaco"
           placeholder="Aggiungi farmaco..."
+          style="padding: 7px"
         />
-        <input type="number" v-model="dosaggio" placeholder="Dosaggio (mg)" />
-        <input type="time" v-model="farmacOrario" />
-        <button @click="SubmitDrug" class="add-btn-farmaci">AGGIUNGI</button>
+        <input
+          type="number"
+          v-model="dosaggio"
+          placeholder="Dosaggio (mg)"
+          style="padding: 7px"
+        />
+        <input type="time" v-model="farmacOrario" style="padding: 7px" />
+        <button
+          @click="SubmitDrug"
+          class="add-btn-farmaci"
+          style="padding: 7px"
+        >
+          AGGIUNGI
+        </button>
       </div>
       <div class="table-container-farmaci">
         <table class="table-farmaci">
@@ -56,9 +68,10 @@
           type="text"
           v-model="task"
           placeholder="Aggiungi promemoria..."
+          style="padding: 7px"
         />
-        <input type="date" v-model="reminderDate" />
-        <input type="time" v-model="reminderTime" />
+        <input type="date" v-model="reminderDate" style="padding: 7px" />
+        <input type="time" v-model="reminderTime" style="padding: 7px" />
         <button @click="SubmitTask" class="add-btn-task">AGGIUNGI</button>
       </div>
       <div class="table-container-task">
@@ -593,19 +606,33 @@ hr {
   margin-bottom: 20px;
 }
 
-.del-btn,
+.del-btn {
+  border: none;
+  width: 100px;
+  margin-top: 15px;
+  height: 30px;
+  padding: 10px;
+  padding-bottom: 5px;
+  background-color: #77b631;
+  color: white;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  margin-left: 10px;
+  transition: o.25s;
+  cursor: pointer;
+}
 .add-btn-farmaci,
 .add-btn-task {
   border: none;
   width: 100px;
   margin-top: 15px;
   height: 30px;
-  padding: 2px;
+  padding: 10px;
   background-color: #77b631;
   color: white;
   margin-bottom: 20px;
   border-radius: 5px;
-  margin-left: 30px;
+  margin-left: 120px;
   transition: o.25s;
   cursor: pointer;
 }
