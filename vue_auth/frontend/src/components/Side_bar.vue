@@ -82,12 +82,11 @@ export default {
 </script>
 
 <template>
-  <div class="sidebar" :style="{ width: sidebarwidth }">
+  <div class="sidebar" :style="{ width: sidebarWidth }">
     <br />
-    <div style="font-size: x-large; font: 400px; font-style: italic">
-      {{ userLine1 }}
-      <br />
-      {{ userLine2 }}
+    <div class="user-lines">
+      <span class="user-line">{{ userLine1 }}</span>
+      <span class="user-line">{{ userLine2 }}</span>
     </div>
     <br />
     <br /><br />
@@ -111,13 +110,13 @@ export default {
     </h1>
 
     <br /><br /><br />
-    <SidebarLink to="/analytics">analytics</SidebarLink>
+    <SidebarLink to="/analytics">Analytics</SidebarLink>
     <br />
-    <SidebarLink to="/alert">alert</SidebarLink>
+    <SidebarLink to="/alert">Alert</SidebarLink>
     <br />
-    <SidebarLink to="/memos">promemoria</SidebarLink>
+    <SidebarLink to="/memos">Promemoria</SidebarLink>
     <br />
-    <SidebarLink to="/referenti">associa</SidebarLink>
+    <SidebarLink to="/referenti">Associa</SidebarLink>
     <br />
 
     <span
@@ -136,9 +135,7 @@ export default {
   --sidebar-item-hover: #c79598;
   --sidebar-item-active: #276749;
 }
-</style>
 
-<style scoped>
 .sidebar {
   color: white;
   background-color: var(--sidebar-bc-color);
@@ -154,6 +151,15 @@ export default {
   display: flex;
   text-align: center;
   flex-direction: column;
+}
+
+.user-lines {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.user-line {
+  display: block;
 }
 
 .collapse-icon {

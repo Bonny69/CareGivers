@@ -1,5 +1,5 @@
 <template>
-  <Side_bar> </Side_bar>
+  <Side_bar></Side_bar>
   <div :style="{ 'margin-left': sidebarWidth }"></div>
 
   <body>
@@ -304,5 +304,15 @@ body {
 .threeshold {
   text-align: center;
   margin-top: 60px;
+}
+
+h3 {
+  color: #c35b46;
+}
+
+hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #9e331d;
 }
 </style>

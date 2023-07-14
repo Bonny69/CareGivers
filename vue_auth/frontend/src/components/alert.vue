@@ -3,16 +3,7 @@
     <button
       id="alert"
       v-if="isPatient()"
-      style="
-        background-color: #9e331d;
-        border-radius: 5px;
-        width: 200px;
-        height: 90px;
-        top: 70px;
-        color: white;
-        font-size: 26px;
-      "
-      :style="{ backgroundColor: buttonHover ? '#ff0000' : '#9e331d' }"
+      :class="{ 'button-hover': buttonHover }"
       @click="sendEmergency"
       @mouseenter="buttonHover = true"
       @mouseleave="buttonHover = false"
@@ -21,37 +12,26 @@
     </button>
     <div class="analitiche">
       <div class="header">
-        <h1 style="padding-top: 20px">STATISTICHE</h1>
-        <hr style="width: 100%" color="black" />
+        <h1>STATISTICHE</h1>
+        <hr />
       </div>
-      <input type="date" v-model="startDate" />&nbsp;&nbsp;&nbsp;
-      <input type="date" v-model="endDate" />&nbsp;&nbsp;&nbsp;
-      <select id="dropdownMenu" v-model="parametro">
-        <option value="spO2">spO2</option>
-        <option value="fc">fc</option>
-        <option value="systolic">systolic</option>
-        <option value="diastolic">diastolic</option>
-      </select>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <input
-        type="button"
-        value="CALCOLA"
-        :class="{ 'button-hover': hoverButton }"
-        style="border-radius: 5px; border-color: grey"
-        @mouseover="hoverButton = true"
-        @mouseleave="hoverButton = false"
-        @click="getMedia()"
-      />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div style="margin-top: 40px; font-size: large">
-        {{ avg }}
+      <div class="input-container">
+        <input type="date" v-model="startDate" />
+        <input type="date" v-model="endDate" />
+        <select id="dropdownMenu" v-model="parametro">
+          <option value="spO2">spO2</option>
+          <option value="fc">fc</option>
+          <option value="systolic">systolic</option>
+          <option value="diastolic">diastolic</option>
+        </select>
+        <button class="calc-button" @click="getMedia">CALCOLA</button>
       </div>
+      <div class="result" v-if="avg !== null">{{ avg }}</div>
     </div>
   </div>
 </template>
 
 <script>
-/* eslint-disable vue/multi-word-component-names */
 import axios from "axios";
 import { encrypt } from "./cipher";
 
@@ -65,13 +45,12 @@ export default {
       startDate: null,
       endDate: null,
       parametro: null,
-      avg: "Inserisci le informazioni per calcolare la media dei parametri vitali relativa ai valori selezionati",
+      avg: null,
       buttonHover: false,
       ruolo: sessionStorage.getItem("ruolo"),
     };
   },
   created() {
-    // console.log(process.env.SECRET_KEY);
     if (sessionStorage.getItem("token") === null) {
       alert("non autorizzato");
       this.$router.push("/login");
@@ -130,7 +109,6 @@ export default {
     },
 
     getMedia() {
-      //console.log(sessionStorage);
       let collezione;
       if (this.isPatient) {
         collezione = sessionStorage.getItem("email") + "/vitalparameters";
@@ -140,9 +118,9 @@ export default {
       }
 
       if (
-        this.startDate != null &&
-        this.endDate != null &&
-        this.parametro != null
+        this.startDate !== null &&
+        this.endDate !== null &&
+        this.parametro !== null
       ) {
         const data = {
           collection: collezione,
@@ -166,28 +144,81 @@ export default {
 </script>
 
 <style>
-.alert {
-  width: 100px;
-}
-
-.alert :hover {
-  background-color: red;
-}
-
 .layout {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
 }
 
-.button-hover {
-  background-color: grey;
+button#alert {
+  background-color: #9e331d;
+  border-radius: 5px;
+  width: 200px;
+  height: 90px;
+  color: white;
+  font-size: 26px;
+  transition: background-color 0.3s;
+}
+
+button#alert.button-hover {
+  background-color: #ff0000;
 }
 
 .analitiche {
   text-align: center;
   border-radius: 10px;
-  margin-top: 200px;
-  background: #c59c9f;
-  height: 350px;
+  margin-top: 50px;
+  background-color: #c59c9f;
+  padding: 20px;
   width: 700px;
+  max-width: 90vw;
+}
+
+.analitiche .header {
+  padding-top: 20px;
+}
+
+.analitiche h1 {
+  font-size: 24px;
+}
+
+.analitiche hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid black;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+input[type="date"],
+select {
+  margin-right: 10px;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+button.calc-button {
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border-color: grey;
+  transition: background-color 0.3s;
+}
+
+button.calc-button:hover {
+  background-color: grey;
+}
+
+.result {
+  margin-top: 40px;
+  font-size: 18px;
 }
 </style>
