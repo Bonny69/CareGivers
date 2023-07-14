@@ -40,17 +40,22 @@ export default {
     this.fetchPatients();
   },
   methods: {
-    fetchPatients() {
-      // Fetch the list of patients from your API
-      axios
-        .get("/api/patients")
+    async fetchPatients() {
+      console.log(sessionStorage.getItem("email"));
+      const email = {
+        email_caregiver: sessionStorage.getItem("email"),
+      };
+      await axios
+        .post("http://localhost:5001/home", email)
         .then((response) => {
+          console.log(response.data);
           this.patients = response.data;
         })
         .catch((error) => {
           console.error(error);
         });
     },
+
     selectPatient(patientId) {
       // Update the selected patient and fetch their data
       this.selectedPatient = patientId;

@@ -41,9 +41,9 @@ export default {
 
       await axios.post("http://localhost:5000/login", loggedUser).then(
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.status === 200) {
-            console.log(res.data.token);
+            //console.log(res.data.token);
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("email", res.data.email);
             sessionStorage.setItem("ruolo", decrypt(res.data.ruolo));
@@ -51,8 +51,12 @@ export default {
               "setUser",
               "benvenuto!  " + decrypt(res.data.email)
             );
-
-            this.$router.push("/memos");
+            // console.log(res.data.ruolo);
+            if (decrypt(res.data.ruolo) != "paziente") {
+              this.$router.push("/home");
+            } else {
+              this.$router.push("/memos");
+            }
           } else {
             alert("errore! controllare le credenziali inserite");
           }

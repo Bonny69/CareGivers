@@ -62,12 +62,12 @@ app.post('/signup', async (req, res) => {
 app.post('/login',  async(req,res) =>{
   
   const { user } = require('./user.js')
-  console.log('dentro login server')
-  console.log(req.body)
+  //console.log('dentro login server')
+ // console.log(req.body)
   try {
     const User = await user.findOne({ email: req.body.email });
     // Rest of the code
-    console.log(User)
+    //console.log(User)
     if(!User){
       return res.status(400).json({
         title: 'user not found',
@@ -75,8 +75,8 @@ app.post('/login',  async(req,res) =>{
      })
     }
 
-    console.log(User.password) 
-    console.log(req.body.password)
+    //console.log(User.password) 
+    //console.log(req.body.password)
 
     if(!bcrypt.compareSync(req.body.password,User.password)) {
       return res.status(401).json({
