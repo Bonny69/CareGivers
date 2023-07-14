@@ -4,36 +4,28 @@
     <div class="patient-boxes">
       <div
         v-for="patient in patients"
-        :key="patient._id"
+        :key="patient"
         class="patient-box"
-        :class="{ selected: patient._id === selectedPatient }"
-        @click="selectPatient(patient._id)"
+        :class="{ selected: patient === selectedPatient }"
+        @click="selectPatient(patient)"
       >
-        <span>{{ patient.name }}</span>
+        <span>{{ patient }}</span>
       </div>
-    </div>
-
-    <div v-if="selectedPatient">
-      <h2>Patient Data</h2>
-      <ul>
-        <li v-for="data in patientData" :key="data._id">
-          <!-- Display patient data here -->
-        </li>
-      </ul>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { decrypt } from "./cipher";
 
 export default {
   name: "Home",
   data() {
     return {
-      patients: ["ciao", "suca"],
+      patients: [],
       selectedPatient: null,
-      patientData: ["paolo", "rebi"],
+      patientData: [],
     };
   },
   mounted() {
@@ -41,7 +33,7 @@ export default {
   },
   methods: {
     async fetchPatients() {
-      console.log(sessionStorage.getItem("email"));
+      //console.log(sessionStorage.getItem("email"));
       const email = {
         email_caregiver: sessionStorage.getItem("email"),
       };
@@ -49,7 +41,12 @@ export default {
         .post("http://localhost:5001/home", email)
         .then((response) => {
           console.log(response.data);
-          this.patients = response.data;
+
+          const documents = response.data;
+          for (let i = 0; i < documents.length; i++) {
+            console.log(decrypt(documents[i].patient));
+            this.patients.push(decrypt(documents[i].patient));
+          }
         })
         .catch((error) => {
           console.error(error);
