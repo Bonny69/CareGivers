@@ -7,15 +7,15 @@ export const bp = {
         {
           label: "systolic",
           data: [],
-          backgroundColor: "rgba(54,73,93,.5)",
-          borderColor: "#36495d",
+          //backgroundColor: "#03dac5",
+          borderColor: "#03dac5",
           borderWidth: 3
         },
         {
             label: "diastolic",
             data: [],
-            backgroundColor: "rgba(404,73,93,.5)",
-            borderColor: "#31495d",
+            //backgroundColor: "#ffffff",
+            borderColor: "#ffffff",
             borderWidth: 3
           }
       ]
@@ -28,7 +28,9 @@ export const bp = {
           {
             ticks: {
               maxTicksLimit: 10, // Limit the number of x-axis ticks to 10
-              padding: 10
+              padding: 25,
+              fontColor: 'white',
+              fontSize: 14,
             }
           }
         ],
@@ -36,12 +38,20 @@ export const bp = {
           {
             ticks: {
               beginAtZero: true,  
-              padding: 25
+              padding: 25,
+              fontColor: 'white',
+              fontSize: 14,
             }
           }
         ]
-      }
+      },
+      legend: {
+        labels: {
+          fontColor: 'white',
+          fontSize: 16,
+        }
     }
-  };
+  }
+}
   
   export default bp;

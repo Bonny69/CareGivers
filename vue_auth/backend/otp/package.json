@@ -4,8 +4,16 @@
   "description": "Microservice which contains the server logic for the insertion and checking of otp number generated to associate caregiver's account with patient's account",
   "main": "otp.js",
   "scripts": {
-    "otp": "nodemon otp"
+    "otp": "nodemon otpService"
   },
   "author": "Alessandro Cassani",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongodb": "^5.6.0",
+    "mongoose": "^6.10.0"
+  }
 }

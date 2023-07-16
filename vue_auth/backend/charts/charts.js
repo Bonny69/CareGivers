@@ -4,34 +4,25 @@ const uri = 'mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
 mongoose.set('strictQuery', false);
-const router = require('express').Router();
-const {alerts} = require('../../frontend/src/models/alerts.js')
-const {parameters} = require('../../frontend/src/models/parameters.js')
-const moment = require('moment')
-
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 const app = express()
 const port = process.env.port || 5005;
 app.use(express.json());
-app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
+app.use(cors());
 
-const database = () => {
-  const connectionParams = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
+const database = async () => {
   try {
-     mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/alerts?retryWrites=true&w=majority')
+     await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/alerts?retryWrites=true&w=majority')
     console.log('DB connected')
   } catch (error) {
     console.log(error)
   }
 }
+database();
 
     app.get('/getData', async (req,res) => {
       const field = req.query.field
@@ -85,8 +76,11 @@ const database = () => {
 
         const result = await collection.findOne({patient: req.body.email})
         console.log(result)
-        res.status(200).json(result)
-        
+        if(result){
+          res.status(200).json(result)
+        }else{
+          res.status(400).json()
+        }
       } catch (error) {
         console.log(error)
       }
@@ -94,6 +88,7 @@ const database = () => {
 
     app.post('/insertAlerts', async(req,res) => {
       console.log(req.body)
+      const {alerts} = require('./alerts.js')
       try{
         database()
         const alert = new alerts({
@@ -116,6 +111,7 @@ const database = () => {
 
   app.post('/insertPv', async (req,res) => {
     console.log(req.body)
+    const {parameters} = require('./parameters.js')
     try {
       const collezione= req.body.collection
       await client.connect();

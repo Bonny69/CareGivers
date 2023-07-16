@@ -4,9 +4,6 @@ const uri = 'mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { Memo } = require('../../frontend/src/models/schedule.js')
-const { terapia } = require('../../frontend/src/models/therapy.js')
-const bcrypt = require('bcrypt');
 mongoose.set('strictQuery', false);
 const router = require('express').Router();
 
@@ -21,27 +18,20 @@ app.use(bodyParser.urlencoded({extended:false}));
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
-const database = () => {
-    const connectionParams = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+const database = async () => {
     try {
-       mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/scheduling?retryWrites=true&w=majority')
+       await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/scheduling?retryWrites=true&w=majority')
       console.log('DB connected')
     } catch (error) {
       console.log(error)
     }
   }
+  database();
 
 
   app.post('/insertMemo', async (req,res) => {
     console.log('DENTRO INSERT-MEMO SERVER')
-    database();
-
     try {
-        //console.log('email ' + req.body.email_paziente)
-
         const dataMemo = new Date(req.body.data)
         
         const [hoursString, minutesString] = req.body.orario.split(":");
@@ -53,6 +43,7 @@ const database = () => {
 
         const timeDiffInSeconds = Math.floor((selectedDate.getTime() - new Date()) / 1000);
         console.log(timeDiffInSeconds + ' DIFFERENZA SECONDI')
+        const { Memo } = require('./schedule.js')
 
         const schedule = new Memo({
           paziente: req.body.email_paziente,                      
@@ -80,10 +71,10 @@ const database = () => {
 
   app.get('/getMemos', async (req,res) => {
     //console.log('DENTRO GET-MEMO SERVER')
-    database();
-
+    const { Memo } = require('./schedule.js')
+    console.log(req.query.email)
     try {
-      const documents = await Memo.find({email: req.body.email});
+      const documents = await Memo.find({paziente: req.query.email});
       //console.log(documents)
       res.json(documents)
     } catch (error) {
@@ -97,7 +88,7 @@ const database = () => {
   app.post('/insertTherapy', async(req,res) => {
 
     console.log('DENTRO INSERT TERAPIA SERVER')
-    database();
+    const { terapia } = require('./therapy.js')
 
     try {
       const farmaci = new terapia({
@@ -121,10 +112,11 @@ const database = () => {
 
   app.get('/getTherapy', async (req,res) => {
     console.log('DENTRO GET-Therapy SERVER')
-    database();
+    const { terapia } = require('./therapy.js')
+    console.log(req.query.email)
 
     try { 
-      const documents = await terapia.find({email: req.body.email});
+      const documents = await terapia.find({paziente: req.query.email});
       //console.log(documents)
       res.json(documents)
     } catch (error) {
@@ -137,7 +129,7 @@ const database = () => {
 
   app.post('/deleteTask', async (req,res) => {
    // console.log('DENTRO CANCELLA TASK SERVER')
-    database();
+   const { Memo } = require('./schedule.js')
     console.log(req.body.email)
 
     try {
@@ -154,7 +146,7 @@ const database = () => {
 
   app.post('/deleteDrug', async (req,res) => {
    // console.log('DENTRO CANCELLA farmaco SERVER')
-    database();
+   const { terapia } = require('./therapy.js')
     console.log(req.body.email)
 
     try {
@@ -171,7 +163,7 @@ const database = () => {
 
   app.post('/editTask', async (req,res) => {
     console.log('DENTRO modifica task SERVER')
-    database();
+    const { Memo } = require('./schedule.js')
     console.log(req.body.email)
 
     try {
@@ -193,10 +185,12 @@ const database = () => {
       await client.connect();
         const database = client.db("associazioni");
         const collection = database.collection('caregivers_patients')
-  
+
         const result = await collection.findOne({caregiver: req.body.email})
-        console.log(result)
-        res.status(200).json(result)
+
+        if(result)
+           res.status(200).json(result)
+
     } catch (error) {
       console.log(error)
     }
@@ -206,6 +200,5 @@ const database = () => {
   app.listen(port,(err) => {
     if(err)
         console.log(err);
- 
     console.log('server running on port ' + port);
 })

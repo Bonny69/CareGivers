@@ -13,7 +13,7 @@
       <input type="submit" name="" value="LOGIN" />
       <p id="text">
         Non hai un account?
-        <RouterLink to="/signup" style="color: black">Registrati</RouterLink>
+        <RouterLink to="/signup" style="color: #03dac5">Registrati</RouterLink>
       </p>
     </form>
   </body>
@@ -41,19 +41,26 @@ export default {
 
       await axios.post("http://localhost:5000/login", loggedUser).then(
         (res) => {
-          console.log(res.data);
           if (res.status === 200) {
-            console.log(res.data.token);
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("email", res.data.email);
             sessionStorage.setItem("ruolo", decrypt(res.data.ruolo));
-            this.$router.push("/memos");
+            this.$store.commit(
+              "setUser",
+              "benvenuto!  " + decrypt(res.data.email)
+            );
+            if (decrypt(res.data.ruolo) != "paziente") {
+              this.$router.push("/home");
+            } else {
+              this.$router.push("/memos");
+            }
           } else {
             alert("errore! controllare le credenziali inserite");
           }
         },
         (err) => {
-          console.log(err.response);
+          console.log(err);
+          alert("errore! controllare le credenziali inserite");
         }
       );
     },
@@ -72,7 +79,7 @@ html {
 }
 
 .box h1 {
-  color: black;
+  color: white;
   text-transform: uppercase;
   font-weight: 500;
 }
@@ -85,7 +92,7 @@ html {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #9e331d;
+  background: #6200ee;
   text-align: center;
   border-radius: 10px;
   opacity: 0.8;
@@ -132,7 +139,7 @@ html {
 }
 
 .box input[type="submit"]:hover {
-  background: #c79598;
+  background: #03dac5;
 }
 
 #text {

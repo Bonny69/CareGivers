@@ -1,7 +1,6 @@
 <template>
   <Side_bar></Side_bar>
   <div class="container"></div>
-  <div></div>
   <div>
     <RouterView></RouterView>
   </div>
@@ -16,6 +15,7 @@ export default {
   data() {
     return {
       shouldIncludeComponent: true,
+      user: "",
     };
   },
 };

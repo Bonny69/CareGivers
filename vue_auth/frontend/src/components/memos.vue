@@ -1,114 +1,113 @@
 <template>
-  <body>
-    <div class="wrapper">
-      <div class="container-farmaci">
-        <div class="heading-farmaci">
-          <h3>FARMACI</h3>
-          <hr style="width: 100%" color="black" />
-        </div>
-        <!-- input -->
-        <div class="insert" v-if="!isPatient()">
-          <input
-            type="text"
-            v-model="farmaco"
-            placeholder="Aggiungi farmaco..."
-          />&nbsp;
-          <input
-            type="number"
-            v-model="dosaggio"
-            placeholder="Dosaggio (mg)"
-          />&nbsp;
-          <input type="time" v-model="farmacOrario" />
-          <button @click="SubmitDrug" class="add-btn-farmaci">AGGIUNGI</button>
-        </div>
-        <!-- table -->
-        <div class="table-container-farmaci">
-          <table border="{3}" class="table-farmaci">
-            <thead>
-              <tr>
-                <th>Farmaco</th>
-                <th>Dosaggio (mg)</th>
-                <th>Orario</th>
-                <th v-if="!isPatient()">Elimina</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(task, index) in terapia"
-                :key="index"
-                :class="{ 'blue-bg': task.reminderDate === today }"
-              >
-                <td>{{ task.farmaco }}</td>
-                <td>{{ task.dosaggio }}</td>
-                <td>{{ task.orario }}</td>
-                <td v-if="!isPatient()">
-                  <href
-                    class="del-btn"
-                    style="border-radius: 4px"
-                    @click="deleteDrug(index)"
-                  >
-                    Elimina
-                  </href>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <div class="wrapper">
+    <div class="container-farmaci">
+      <div class="heading-farmaci">
+        <h3 style="color: #6200ee">FARMACI</h3>
+        <br />
+        <hr />
       </div>
-      <div class="container-task">
-        <div class="heading-task">
-          <h3>PROMEMORIA</h3>
-          <hr style="width: 100%" color="black" />
-        </div>
-        <!-- input -->
-        <div class="insert" v-if="!isPatient()">
-          <input
-            type="text"
-            v-model="task"
-            placeholder="Aggiungi promemoria..."
-          />&nbsp; <input type="date" v-model="reminderDate" />&nbsp;
-          <input type="time" v-model="reminderTime" />
-          <button @click="SubmitTask" class="add-btn-task">AGGIUNGI</button>
-        </div>
-        <!-- table -->
-        <div class="table-container-task">
-          <table border="{3}" class="table-task">
-            <thead>
-              <tr>
-                <th>Evento</th>
-                <th>Data</th>
-                <th>Orario</th>
-                <th v-if="!isPatient()">Elimina</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(task, index) in tasks"
-                :key="index"
-                :class="{ 'blue-bg': task.reminderDate === today }"
-              >
-                <td>{{ task.evento }}</td>
-                <td>{{ task.data }}</td>
-                <td>{{ task.orario }}</td>
-                <td v-if="!isPatient()">
-                  <href
-                    class="del-btn"
-                    style="border-radius: 4px"
-                    @click="deleteTask(index)"
-                  >
-                    Elimina
-                  </href>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="insert" v-if="!isPatient()">
+        <input
+          type="text"
+          v-model="farmaco"
+          placeholder="Aggiungi farmaco..."
+          style="padding: 7px"
+        />
+        <input
+          type="number"
+          v-model="dosaggio"
+          placeholder="Dosaggio (mg)"
+          style="padding: 7px"
+        />
+        <input type="time" v-model="farmacOrario" style="padding: 7px" />
+        <button
+          @click="SubmitDrug"
+          class="add-btn-farmaci"
+          style="padding: 7px"
+        >
+          AGGIUNGI
+        </button>
+      </div>
+      <div class="table-container-farmaci">
+        <table class="table-farmaci">
+          <thead>
+            <tr>
+              <th>Farmaco</th>
+              <th>Dosaggio (mg)</th>
+              <th>Orario</th>
+              <th v-if="!isPatient()">Elimina</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(task, index) in terapia"
+              :key="index"
+              :class="{ 'blue-bg': task.reminderDate === today }"
+            >
+              <td>{{ task.farmaco }}</td>
+              <td>{{ task.dosaggio }}</td>
+              <td>{{ task.orario }}</td>
+              <td v-if="!isPatient()">
+                <button class="del-btn" @click="deleteDrug(index)">
+                  Elimina
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </body>
+    <div class="container-task">
+      <div class="heading-task">
+        <h3 style="color: #6200ee">PROMEMORIA</h3>
+        <br />
+        <hr />
+      </div>
+      <div class="insert" v-if="!isPatient()">
+        <input
+          type="text"
+          v-model="task"
+          placeholder="Aggiungi promemoria..."
+          style="padding: 7px"
+        />
+        <input type="date" v-model="reminderDate" style="padding: 7px" />
+        <input type="time" v-model="reminderTime" style="padding: 7px" />
+        <button @click="SubmitTask" class="add-btn-task">AGGIUNGI</button>
+      </div>
+      <div class="table-container-task">
+        <table class="table-task">
+          <thead>
+            <tr>
+              <th>Evento</th>
+              <th>Data</th>
+              <th>Orario</th>
+              <th v-if="!isPatient()">Elimina</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(task, index) in tasks"
+              :key="index"
+              :class="{ 'blue-bg': task.reminderDate === today }"
+            >
+              <td>{{ task.evento }}</td>
+              <td>{{ task.data }}</td>
+              <td>{{ task.orario }}</td>
+              <td v-if="!isPatient()">
+                <button class="del-btn" @click="deleteTask(index)">
+                  Elimina
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+/* eslint-disable vue/multi-word-component-names */
 import axios from "axios";
 import { encrypt, decrypt } from "./cipher";
 
@@ -141,7 +140,16 @@ export default {
     if (sessionStorage.getItem("token") === null) {
       alert("non autorizzato");
       this.$router.push("/login");
+    } else {
+      if (
+        sessionStorage.getItem("ruolo") === "caregiver" &&
+        sessionStorage.getItem("flagScelta") === null
+      ) {
+        alert("selezionare un paziente");
+        this.$router.push("/home");
+      }
     }
+
     window.addEventListener("beforeunload", this.handleBeforeUnload);
   },
   beforeUnmount() {
@@ -301,7 +309,7 @@ export default {
     async setup() {
       this.client = this.$store.state.selectedItem;
       if (this.isPatient()) {
-        console.log(this.topicDrug + " TOPIC drug");
+        console.log(decrypt(sessionStorage.getItem("email")));
         this.getMemos(sessionStorage.getItem("email"));
         this.getFarmaci(sessionStorage.getItem("email"));
         if (this.checkFlag()) {
@@ -365,7 +373,7 @@ export default {
         }
         this.setFlag();
       } else {
-        await this.getEmailPaziente();
+        console.log(sessionStorage.getItem("email_paziente"));
         this.getMemos(sessionStorage.getItem("email_paziente"));
         this.getFarmaci(sessionStorage.getItem("email_paziente"));
 
@@ -390,22 +398,6 @@ export default {
           this.$store.dispatch("updateSelectedItem", this.client);
         }
       }
-    },
-
-    getEmailPaziente() {
-      return new Promise((resolve) => {
-        const data = {
-          email: sessionStorage.getItem("email"),
-        };
-        console.log(sessionStorage.getItem("email") + " email caregiver");
-        axios
-          .post("http://localhost:5002/getEmailPatient", data)
-          .then((res) => {
-            console.log(res.data.patient + " email paziente associato");
-            sessionStorage.setItem("email_paziente", res.data.patient);
-            resolve();
-          });
-      });
     },
 
     setAlertTaskFromMqtt(message) {
@@ -554,7 +546,7 @@ export default {
     async getMemos(email_) {
       const email = { email: email_ };
       await axios
-        .get("http://localhost:5002/getMemos", email)
+        .get("http://localhost:5002/getMemos", { params: email })
         .then((response) => {
           const documents = response.data;
 
@@ -573,7 +565,7 @@ export default {
       const email = { email: email_ };
 
       await axios
-        .get("http://localhost:5002/getTherapy", email)
+        .get("http://localhost:5002/getTherapy", { params: email })
         .then((response) => {
           const documents = response.data;
 
@@ -599,113 +591,110 @@ export default {
   margin-top: -220px;
 }
 
-.heading-farmaci {
-  font-weight: bold;
-  margin-bottom: 30px;
-  color: #c79598;
-}
-
+.heading-farmaci,
 .heading-task {
   font-weight: bold;
   margin-bottom: 30px;
-  color: darkgoldenrod;
+  color: #6200;
+  text-align: center;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid black;
+  margin-top: -10px;
+  margin-bottom: 20px;
 }
 
 .del-btn {
-  background-color: #88474c;
+  border: none;
+  width: 100px;
+  margin-top: 15px;
+  height: 30px;
+  padding: 10px;
+  padding-bottom: 5px;
+  background-color: #6200ee;
   color: white;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  margin-left: 10px;
+  transition: o.25s;
+  cursor: pointer;
+}
+.add-btn-farmaci,
+.add-btn-task {
+  border: none;
+  width: 100px;
+  margin-top: 15px;
+  height: 30px;
+  padding: 10px;
+  background-color: #6200ee;
+  color: white;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  margin-left: 120px;
+  transition: o.25s;
+  cursor: pointer;
+}
+
+.del-btn:hover,
+.add-btn-farmaci:hover,
+.add-btn-task:hover {
+  background-color: #3700b3;
 }
 
 .container-farmaci {
-  width: 1300px;
-  margin-left: 250px;
+  width: 1100px;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 260px;
+  margin-left: 150px;
 }
-
 .container-task {
-  width: 1300px;
-  margin-left: 250px;
+  width: 1100px;
   text-align: center;
   margin-top: 150px;
+  margin-left: 150px;
 }
 
-.table-container-farmaci {
-  max-height: 200px;
-  overflow-y: scroll;
-}
-
+.table-container-farmaci,
 .table-container-task {
   max-height: 200px;
-  overflow-y: scroll;
-}
-
-.table-farmaci {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+  overflow-y: auto;
   margin-top: 20px;
-  background-color: #c79598;
+  width: 1100px;
 }
 
+.table-farmaci,
 .table-task {
-  font-family: arial, sans-serif;
+  font-family: Arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  margin-top: 20px;
-  background-color: palegoldenrod;
 }
 
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: center;
+.table-farmaci th,
+.table-task th {
+  background-color: #03dac5;
+  color: black;
   padding: 8px;
+  text-align: center;
+  border: 1px solid #dddddd;
+  font-weight: bold; /* Increase font weight */
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-
-button:hover {
-  background-color: #9e331d;
+.table-farmaci td,
+.table-task td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #dddddd;
 }
 
 .blue-bg {
   background-color: blue;
 }
 
-.add-btn-farmaci {
-  border: none;
-  width: 100px;
-  height: 30px;
-  padding: 2px;
-  background-color: grey;
-  color: white;
-  margin-left: 50px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  transition: o.25s;
-  cursor: pointer;
-}
-
-.add-btn-task {
-  border: none;
-  width: 100px;
-  height: 30px;
-  padding: 2px;
-  background-color: grey;
-  color: white;
-  margin-left: 50px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  transition: o.25s;
-  cursor: pointer;
-}
-
-.edit-btn {
-  border: none;
-  background-color: #77b631;
-  color: white;
+/* Add spacing between input fields */
+.insert input {
+  margin-bottom: 10px;
+  margin-left: 15px;
 }
 </style>

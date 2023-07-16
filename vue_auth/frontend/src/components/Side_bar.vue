@@ -1,10 +1,22 @@
 <script>
 import { collapsed, toggleSidebar, sidebarWidth } from "./state";
 import SidebarLink from "./SidebarLink.vue";
-import mqtt from "mqtt";
+import mqtt from "mqtt/dist/mqtt";
 import { ref } from "vue";
+import { mapState } from "vuex";
 
 export default {
+  computed: {
+    ...mapState(["user"]),
+    userLine1() {
+      // Split the user string into two lines
+      return this.user ? this.user.substring(0, 10) : "";
+    },
+    userLine2() {
+      // Split the user string into two lines
+      return this.user ? this.user.substring(10) : "";
+    },
+  },
   props: {},
   components: { SidebarLink },
   setup() {
@@ -28,13 +40,12 @@ export default {
   },
 
   async mounted() {
-    console.log(!this.checkFlag());
     if (!this.checkFlag()) {
+      const enhancedSidebarWidth = "300px"; // Set the desired width here
       this.setFlag();
-      console.log(this.checkFlag());
       await this.connectMQTT();
       await this.updateVuexConnection();
-      //console.log(this.$store.state.selectedItem);
+      return { collapsed, toggleSidebar, sidebarWidth: enhancedSidebarWidth };
     }
   },
   methods: {
@@ -71,8 +82,14 @@ export default {
 </script>
 
 <template>
-  <div class="sidebar" :style="{ width: sidebarwidth }">
+  <div class="sidebar" :style="{ width: sidebarWidth }">
     <br />
+    <div class="user-lines">
+      <span class="user-line">{{ userLine1 }}</span>
+      <span class="user-line">{{ userLine2 }}</span>
+    </div>
+    <br />
+    <br /><br />
     <h1>
       <span v-if="collapsed">
         <div class="scritta">
@@ -88,17 +105,18 @@ export default {
           <div>S</div>
         </div>
       </span>
-      <span v-else>&nbsp;Menù</span>
+
+      <span v-else style="color: white">&nbsp;Menù</span>
     </h1>
 
     <br /><br /><br />
-    <SidebarLink to="/analytics">analytics</SidebarLink>
+    <SidebarLink to="/analytics">Analytics</SidebarLink>
     <br />
-    <SidebarLink to="/alert">alert</SidebarLink>
+    <SidebarLink to="/alert">Alert</SidebarLink>
     <br />
-    <SidebarLink to="/memos">promemoria</SidebarLink>
+    <SidebarLink to="/memos">Promemoria</SidebarLink>
     <br />
-    <SidebarLink to="/referenti">associa</SidebarLink>
+    <SidebarLink to="/referenti">Associa</SidebarLink>
     <br />
 
     <span
@@ -113,13 +131,11 @@ export default {
 
 <style>
 :root {
-  --sidebar-bc-color: #9e331d;
-  --sidebar-item-hover: #c79598;
+  --sidebar-bc-color: #3700b3;
+  --sidebar-item-hover: #03dac5;
   --sidebar-item-active: #276749;
 }
-</style>
 
-<style scoped>
 .sidebar {
   color: white;
   background-color: var(--sidebar-bc-color);
@@ -135,6 +151,15 @@ export default {
   display: flex;
   text-align: center;
   flex-direction: column;
+}
+
+.user-lines {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.user-line {
+  display: block;
 }
 
 .collapse-icon {
