@@ -334,8 +334,10 @@ export default {
 }
 
 canvas {
-  background-color: #f2f2f2;
+  background-color: #6200ee;
   border: 1px solid #dddddd;
   border-radius: 5px;
+  color: white;
+  padding: 20px;
 }
 </style>

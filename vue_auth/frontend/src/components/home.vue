@@ -114,12 +114,14 @@ export default {
 
 h1 {
   margin-bottom: 0;
+  color: #6200ee;
 }
 
 .patient-box {
   width: 270px;
   height: 200px;
-  background-color: lightblue;
+  background-color: #03dac5;
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,7 +130,8 @@ h1 {
 }
 
 .patient-box:hover {
-  background-color: lightyellow;
+  background-color: #3700b3;
+  color: white;
 }
 
 .patient-box:active {

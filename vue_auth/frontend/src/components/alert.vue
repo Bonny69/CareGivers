@@ -159,24 +159,26 @@ export default {
 }
 
 button#alert {
-  background-color: #9e331d;
+  background-color: #03dac5;
   border-radius: 5px;
   width: 200px;
   height: 90px;
-  color: white;
+  color: black;
   font-size: 26px;
   transition: background-color 0.3s;
 }
 
 button#alert.button-hover {
-  background-color: #ff0000;
+  background-color: #3700b3;
+  color: white;
 }
 
 .analitiche {
+  color: white;
   text-align: center;
   border-radius: 10px;
   margin-top: 50px;
-  background-color: #c59c9f;
+  background-color: #6200ee;
   padding: 10px;
   width: 700px;
   max-height: 550px;
@@ -184,7 +186,7 @@ button#alert.button-hover {
 }
 
 .analitiche .header {
-  padding-top: 60px;
+  padding-top: 30px;
 }
 
 .analitiche h1 {
@@ -194,7 +196,7 @@ button#alert.button-hover {
 .analitiche hr {
   width: 100%;
   border: none;
-  border-top: 1px solid black;
+  border-top: 1px solid white;
   margin-bottom: 20px;
 }
 
@@ -230,6 +232,6 @@ button.calc-button {
 }
 
 button.calc-button:hover {
-  background-color: grey;
+  background-color: #03dac5;
 }
 </style>

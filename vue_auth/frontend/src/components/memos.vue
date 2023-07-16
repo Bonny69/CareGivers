@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="container-farmaci">
       <div class="heading-farmaci">
-        <h3>FARMACI</h3>
+        <h3 style="color: #6200ee">FARMACI</h3>
         <br />
         <hr />
       </div>
@@ -59,7 +59,7 @@
     </div>
     <div class="container-task">
       <div class="heading-task">
-        <h3>PROMEMORIA</h3>
+        <h3 style="color: #6200ee">PROMEMORIA</h3>
         <br />
         <hr />
       </div>
@@ -595,7 +595,7 @@ export default {
 .heading-task {
   font-weight: bold;
   margin-bottom: 30px;
-  color: #c79598;
+  color: #6200;
   text-align: center;
 }
 
@@ -613,7 +613,7 @@ hr {
   height: 30px;
   padding: 10px;
   padding-bottom: 5px;
-  background-color: #77b631;
+  background-color: #6200ee;
   color: white;
   margin-bottom: 20px;
   border-radius: 5px;
@@ -628,7 +628,7 @@ hr {
   margin-top: 15px;
   height: 30px;
   padding: 10px;
-  background-color: #77b631;
+  background-color: #6200ee;
   color: white;
   margin-bottom: 20px;
   border-radius: 5px;
@@ -640,7 +640,7 @@ hr {
 .del-btn:hover,
 .add-btn-farmaci:hover,
 .add-btn-task:hover {
-  background-color: #568d21;
+  background-color: #3700b3;
 }
 
 .container-farmaci {
@@ -673,8 +673,8 @@ hr {
 
 .table-farmaci th,
 .table-task th {
-  background-color: #c79598;
-  color: white;
+  background-color: #03dac5;
+  color: black;
   padding: 8px;
   text-align: center;
   border: 1px solid #dddddd;

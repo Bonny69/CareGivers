@@ -6,10 +6,12 @@ export const fc = {
     datasets: [
       {
         label: "FC",
+        fontColor:'white',
         data: [],
-        backgroundColor: "rgba(54,73,93,.5)",
-        borderColor: "#36495d",
-        borderWidth: 3
+        backgroundColor: "#03dac5",
+        borderColor: "#ffffff",
+        borderWidth: 3,
+        labelColor: 'white'
       }
     ]
   },
@@ -21,7 +23,9 @@ export const fc = {
         {
           ticks: {
             maxTicksLimit: 10, // Limit the number of x-axis ticks to 10
-            padding: 10
+            padding: 25,
+            fontColor: 'white',
+            fontSize: 14,
           }
         }
       ],
@@ -29,12 +33,19 @@ export const fc = {
         {
           ticks: {
             beginAtZero: true,  
-            padding: 25
+            padding: 25,
+            fontColor: 'white',
+            fontSize: 14,
           }
         }
       ]
-    }
-  }
+    },
+    legend: {
+      labels: {
+        fontColor: 'white',
+        fontSize: 16,
+      }
+  }}
 };
 
 export default fc;

@@ -41,11 +41,11 @@ export default {
 
   async mounted() {
     if (!this.checkFlag()) {
+      const enhancedSidebarWidth = "300px"; // Set the desired width here
       this.setFlag();
-      console.log(this.checkFlag());
       await this.connectMQTT();
       await this.updateVuexConnection();
-      //console.log(this.$store.state.selectedItem);
+      return { collapsed, toggleSidebar, sidebarWidth: enhancedSidebarWidth };
     }
   },
   methods: {
@@ -106,7 +106,7 @@ export default {
         </div>
       </span>
 
-      <span v-else>&nbsp;Menù</span>
+      <span v-else style="color: white">&nbsp;Menù</span>
     </h1>
 
     <br /><br /><br />
@@ -131,8 +131,8 @@ export default {
 
 <style>
 :root {
-  --sidebar-bc-color: #9e331d;
-  --sidebar-item-hover: #c79598;
+  --sidebar-bc-color: #3700b3;
+  --sidebar-item-hover: #03dac5;
   --sidebar-item-active: #276749;
 }
 

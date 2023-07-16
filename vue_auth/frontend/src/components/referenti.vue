@@ -10,10 +10,11 @@
         v-model="e_mail"
         class="form-control"
         placeholder="email paziente"
+        style="margin-top: 15px; padding: 7px"
       />
       <br />
-      <h2>INSERISCI OTP</h2>
-      <div class="otp-bx">
+      <h2 style="margin-top: 25px">INSERISCI OTP</h2>
+      <div class="otp-bx" style="margin-left: 28px">
         <input type="text" v-model="firstOtp" maxlength="1" />
         <input type="text" v-model="secondOtp" maxlength="1" />
         <input type="text" v-model="thirdOtp" maxlength="1" class="space" />
@@ -21,34 +22,58 @@
         <input type="text" v-model="fifthOtp" maxlength="1" />
       </div>
       <br />
-      <input type="submit" @click="sendOtp()" value="CONFERMA" />
+      <input
+        type="submit"
+        style="margin-top: 10px"
+        @click="sendOtp()"
+        value="CONFERMA"
+      />
     </div>
 
     <div class="threeshold" v-if="!isPatient() && hasChosenPatient()">
       <div>
-        <h3 style="color: #c35b46">ALERTS</h3>
+        <h3
+          style="
+            color: #6200ee;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: x-large;
+          "
+        >
+          ALERTS
+        </h3>
         <hr style="width: 100%" color="#9e331d" />
       </div>
       <label>FC:&nbsp;</label>
-      <input type="number" v-model="fc" />&nbsp;&nbsp;
+      <input type="number" v-model="fc" style="padding: 7px" />&nbsp;&nbsp;
       <label>spO2:&nbsp;</label>&nbsp;
-      <input type="number" v-model="spO2" /> &nbsp;
+      <input type="number" v-model="spO2" style="padding: 7px" /> &nbsp;
       <label>sistolica:&nbsp;</label>&nbsp;
-      <input type="number" v-model="systolic" />&nbsp;
+      <input type="number" v-model="systolic" style="padding: 7px" />&nbsp;
       <label>diastolica:&nbsp;</label>&nbsp;
-      <input type="number" v-model="diastolic" />&nbsp;&nbsp;&nbsp;
+      <input
+        type="number"
+        v-model="diastolic"
+        style="padding: 7px"
+      />&nbsp;&nbsp;&nbsp;
       <input
         type="submit"
         @click="insertAlerts()"
         value="AGGIUNGI"
-        style="color: white; padding: 3px; background-color: #c35b46"
+        style="
+          color: black;
+          padding: 12px;
+          background-color: #03dac5;
+          border-radius: 8px;
+          border-color: white;
+        "
       />
     </div>
 
     <div
       class="inputPaziente"
       v-if="isPatient()"
-      style="background-color: #c59c9f"
+      style="background-color: #6200ee; color: white; padding: 70px"
     >
       <h1>Genera OTP:</h1>
       <br />
@@ -107,7 +132,7 @@ export default {
       return this.ruolo === "paziente";
     },
     hasChosenPatient() {
-      return sessionStorage.getItem("flagScelta") === 1;
+      return sessionStorage.getItem("flagScelta") != null;
     },
     setFlag() {
       sessionStorage.setItem("flagref", 1);
@@ -237,6 +262,7 @@ body {
   text-align: center;
   border-radius: 5px;
   margin: 2px;
+  margin-top: 10px;
   border: 2px solid;
   font-weight: bold;
   outline: none;
@@ -254,10 +280,12 @@ body {
 
 .inputReferente {
   text-align: center;
-  background-color: #c59c9f;
+  background-color: #6200ee;
+  color: white;
   border-radius: 10px;
   padding: 40px;
-  width: 400px;
+  height: 370px;
+  width: 450px;
 }
 
 .inputReferente input[type="submit"] {
@@ -274,13 +302,14 @@ body {
 }
 
 .inputReferente input[type="submit"]:hover {
-  background: lightgray;
+  background-color: #03dac5;
 }
 
 .inputPaziente {
   text-align: center;
   background-color: lightgrey;
   border-radius: 10px;
+  margin-top: 15px;
   padding: 40px;
 }
 
@@ -298,7 +327,7 @@ body {
 }
 
 .inputPaziente input[type="submit"]:hover {
-  background: lightgray;
+  background-color: #03dac5;
 }
 
 .threeshold {
@@ -307,12 +336,13 @@ body {
 }
 
 h3 {
-  color: #c35b46;
+  color: white;
+  margin-top: -10px;
 }
 
 hr {
   width: 100%;
   border: none;
-  border-top: 1px solid #9e331d;
+  border-top: 1px solid white;
 }
 </style>

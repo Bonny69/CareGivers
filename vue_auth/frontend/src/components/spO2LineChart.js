@@ -7,8 +7,8 @@ export const spO2 = {
         {
           label: "SpO2",
           data: [],
-          backgroundColor: "rgba(544,303,93,.5)",
-          borderColor: "#26495d",
+          backgroundColor: "#03dac5",
+          borderColor: "#ffffff",
           borderWidth: 3
         }
       ]
@@ -21,7 +21,10 @@ export const spO2 = {
           {
             ticks: {
               maxTicksLimit: 10, // Limit the number of x-axis ticks to 10
-              padding: 10,
+              padding: 25,
+              fontColor: 'white',
+              fontSize: 14,
+              
 
             }
           }
@@ -33,12 +36,20 @@ export const spO2 = {
               padding: 25,
               precision: 0,
               min:60,
-              max:100
+              max:100,
+              fontColor: 'white',
+              fontSize: 14,
             }
           }
         ]
-      }
+      },
+      legend: {
+        labels: {
+          fontColor: 'white', // Set the legend text color to white
+          fontSize: 16,
+        }
     }
-  };
+  }
+};
   
   export default spO2;

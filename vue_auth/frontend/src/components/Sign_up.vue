@@ -74,7 +74,7 @@
     <input type="submit" name="" value="REGISTER" />
     <p id="text">
       hai un account?
-      <RouterLink to="/login" style="color: black">login</RouterLink>
+      <RouterLink to="/login" style="color: #03dac5">login</RouterLink>
     </p>
   </form>
 </template>
@@ -144,7 +144,7 @@ html {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #9e331d;
+  background: #6200ee;
   text-align: center;
   border-radius: 10px;
   opacity: 0.8;
@@ -152,7 +152,7 @@ html {
 }
 
 .box h1 {
-  color: black;
+  color: white;
   text-transform: uppercase;
   font-weight: 500;
 }
@@ -204,7 +204,7 @@ html {
 }
 
 .box input[type="submit"]:hover {
-  background: lightgray;
+  background: #03dac5;
 }
 
 #text {
