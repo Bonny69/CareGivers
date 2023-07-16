@@ -8,12 +8,16 @@
       @mouseenter="buttonHover = true"
       @mouseleave="buttonHover = false"
     >
-      ALERT
+      <i class="fas fa-exclamation-circle"></i> ALERT
     </button>
     <div class="analitiche">
       <div class="header">
         <h1>STATISTICHE</h1>
         <hr />
+        <div class="message">{{ message }}</div>
+        <div style="margin-top: 40px; font-size: large" v-if="avg !== null">
+          {{ avg }}
+        </div>
       </div>
       <div class="input-container">
         <input type="date" v-model="startDate" />
@@ -24,9 +28,10 @@
           <option value="systolic">systolic</option>
           <option value="diastolic">diastolic</option>
         </select>
-        <button class="calc-button" @click="getMedia">CALCOLA</button>
+        <button class="calc-button" :disabled="isLoading" @click="getMedia">
+          {{ isLoading ? "CALCOLANDO..." : "CALCOLA" }}
+        </button>
       </div>
-      <div class="result" v-if="avg !== null">{{ avg }}</div>
     </div>
   </div>
 </template>
@@ -48,6 +53,8 @@ export default {
       avg: null,
       buttonHover: false,
       ruolo: sessionStorage.getItem("ruolo"),
+      message:
+        "Inserire le informazioni necessarie per il calcolo delle statistiche dei parametri vitali rilevati:",
     };
   },
   created() {
@@ -170,13 +177,14 @@ button#alert.button-hover {
   border-radius: 10px;
   margin-top: 50px;
   background-color: #c59c9f;
-  padding: 20px;
+  padding: 10px;
   width: 700px;
+  max-height: 550px;
   max-width: 90vw;
 }
 
 .analitiche .header {
-  padding-top: 20px;
+  padding-top: 60px;
 }
 
 .analitiche h1 {
@@ -205,6 +213,14 @@ select {
   border-radius: 5px;
 }
 
+.message {
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 button.calc-button {
   padding: 5px 10px;
   font-size: 16px;
@@ -215,10 +231,5 @@ button.calc-button {
 
 button.calc-button:hover {
   background-color: grey;
-}
-
-.result {
-  margin-top: 40px;
-  font-size: 18px;
 }
 </style>

@@ -652,7 +652,7 @@ hr {
 .container-task {
   width: 1100px;
   text-align: center;
-  margin-top: 120px;
+  margin-top: 150px;
   margin-left: 150px;
 }
 

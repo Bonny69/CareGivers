@@ -25,7 +25,6 @@ export default {
       client: null,
       topicPV: sessionStorage.getItem("email_paziente") + "/pv",
       ruolo: sessionStorage.getItem("ruolo"),
-      count: 0,
       chartInstanceFC: null,
       chartInstanceSpO2: null,
       chartInstanceBP: null,
@@ -50,7 +49,7 @@ export default {
           };
 
           this.createChart();
-          this.updateChartData(pv); // Update the chart data with the received message
+          this.updateChartData(pv);
           this.updateChart();
         }
       });
@@ -63,9 +62,8 @@ export default {
         .then(() => this.fetchData("SpO2"))
         .then(() => this.fetchData("bp"))
         .then(() => this.extractObjectFromStorage());
-      //console.log("mounted");
       setInterval(() => {
-        this.fetchData("HR"); //get data every 10 minutes
+        this.fetchData("HR");
         this.fetchData("SpO2");
         this.fetchData("bp");
 
@@ -107,8 +105,6 @@ export default {
         diastolic: dias.toString(),
         collection: sessionStorage.getItem("email") + "/vitalparameters",
       };
-      //console.log(object);
-      //console.log(this.count++);
 
       axios.post("http://localhost:5005/insertPv", object).then((res) => {
         if (res.status === 200) {
@@ -148,7 +144,11 @@ export default {
         },
         (err) => {
           console.log(err);
-          alert("nessuna soglia inserita!");
+
+          if (sessionStorage.getItem("flagAlertAnalytics") === null) {
+            alert("nessuna soglia inserita");
+            sessionStorage.setItem("flagAlertAnalytics", true);
+          }
         }
       );
     },
