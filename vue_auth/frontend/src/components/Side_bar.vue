@@ -41,7 +41,7 @@ export default {
 
   async mounted() {
     if (!this.checkFlag()) {
-      const enhancedSidebarWidth = "300px"; // Set the desired width here
+      const enhancedSidebarWidth = "300px";
       this.setFlag();
       await this.connectMQTT();
       await this.updateVuexConnection();
@@ -133,7 +133,7 @@ export default {
 :root {
   --sidebar-bc-color: #3700b3;
   --sidebar-item-hover: #03dac5;
-  --sidebar-item-active: #276749;
+  --sidebar-item-active: #587099;
 }
 
 .sidebar {

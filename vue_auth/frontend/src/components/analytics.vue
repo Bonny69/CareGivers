@@ -47,6 +47,7 @@ export default {
             systolic: data.systolic,
             diastolic: data.diastolic,
           };
+          console.log(pv);
 
           this.createChart();
           this.updateChartData(pv);
