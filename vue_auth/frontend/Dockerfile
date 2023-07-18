@@ -2,7 +2,7 @@
 FROM node:lts
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /frontend
 
 # Copy package.json and package-lock.json files to the container's working directory
 COPY package*.json ./
