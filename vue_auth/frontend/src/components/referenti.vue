@@ -217,7 +217,6 @@ export default {
               systh: encrypt(this.systolic.toString()),
               diasth: encrypt(this.diastolic.toString()),
             };
-            //console.log(this.client);
             this.client.publish(this.topicAlert, JSON.stringify(alerts));
             alert("soglie inserite correttamente");
           } else {

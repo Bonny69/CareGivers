@@ -28,7 +28,7 @@ export default {
       chartInstanceFC: null,
       chartInstanceSpO2: null,
       chartInstanceBP: null,
-      isDataFetched: false, // Track whether data has been fetched
+      isDataFetched: false, 
     };
   },
 
@@ -331,7 +331,7 @@ export default {
   margin-left: 10%;
   display: flex;
   flex-direction: column;
-  gap: 70px; /* Adjust the gap value as needed */
+  gap: 70px; 
 }
 
 canvas {

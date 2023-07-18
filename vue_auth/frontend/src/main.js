@@ -31,7 +31,6 @@ const store = createStore({
   },
   actions: {
     updateSelectedItem({ commit }, item) {
-      //console.log('dentro')
       commit('setSelectedItem', item);
     },
   },

@@ -5,7 +5,6 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 mongoose.set('strictQuery', false);
 const jwt = require('jsonwebtoken')
-//const { user } = require('./user.js')
 
 const app = express()
 app.use(cors());
@@ -28,8 +27,6 @@ express.json()
 database()
 
 
-
-//routes
 app.post('/signup', async (req, res) => {
   console.log('dentro signup server')
   
@@ -78,21 +75,14 @@ app.post('/user', async(req,res)=>{
 app.post('/login',  async(req,res) =>{
   
   const { user } = require('./user.js')
-  //console.log('dentro login server')
- // console.log(req.body)
   try {
     const User = await user.findOne({ email: req.body.email });
-    // Rest of the code
-    //console.log(User)
     if(!User){
       return res.status(400).json({
         title: 'user not found',
        error: 'invalid credentials'
      })
     }
-
-    //console.log(User.password) 
-    //console.log(req.body.password)
 
     if(!bcrypt.compareSync(req.body.password,User.password)) {
       return res.status(401).json({
@@ -101,7 +91,6 @@ app.post('/login',  async(req,res) =>{
       })
     }
     
-    //console.log('trovato')
     let token = jwt.sign({userID: User._id},'secretKey');
     return res.status(200).json({
       message: 'login avvenuto correttamente',

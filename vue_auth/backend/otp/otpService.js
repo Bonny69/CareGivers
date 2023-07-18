@@ -96,11 +96,9 @@ const database = async () => {
     console.log('dentro home server');
     const { caregivers_patient } = require('./caregivers_associated_patients.js');
     console.log(caregivers_patient)
-    //console.log(req.body)
   
     try {
       const result = await caregivers_patient.find({caregiver: req.body.email_caregiver});
-      //console.log(result);
       return res.json(result);
     } catch (err) {
       console.log(err);

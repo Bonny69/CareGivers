@@ -70,12 +70,10 @@ const database = async () => {
 
 
   app.get('/getMemos', async (req,res) => {
-    //console.log('DENTRO GET-MEMO SERVER')
     const { Memo } = require('./schedule.js')
     console.log(req.query.email)
     try {
       const documents = await Memo.find({paziente: req.query.email});
-      //console.log(documents)
       res.json(documents)
     } catch (error) {
       console.log(err);
@@ -117,7 +115,6 @@ const database = async () => {
 
     try { 
       const documents = await terapia.find({paziente: req.query.email});
-      //console.log(documents)
       res.json(documents)
     } catch (error) {
       console.log(err);
@@ -128,7 +125,6 @@ const database = async () => {
 
 
   app.post('/deleteTask', async (req,res) => {
-   // console.log('DENTRO CANCELLA TASK SERVER')
    const { Memo } = require('./schedule.js')
     console.log(req.body.email)
 
@@ -145,7 +141,6 @@ const database = async () => {
 
 
   app.post('/deleteDrug', async (req,res) => {
-   // console.log('DENTRO CANCELLA farmaco SERVER')
    const { terapia } = require('./therapy.js')
     console.log(req.body.email)
 

@@ -136,7 +136,6 @@ export default {
     };
   },
   created() {
-    //console.log(process.env.VUE_APP_SECRET_KEY);
     if (sessionStorage.getItem("token") === null) {
       alert("non autorizzato");
       this.$router.push("/login");
@@ -180,17 +179,13 @@ export default {
     setAlertsFarmaci() {
       for (let i = 0; i < this.terapia.length; i++) {
         const nomeFarmaco = this.terapia[i].farmaco;
-        //console.log("nome farmaco: " + nomeFarmaco);
-        //console.log(this.terapia[i].orario + " orario terapia");
         const [hours, minutes] = this.terapia[i].orario.split(":");
         const dateObj = new Date();
         dateObj.setHours(hours);
         dateObj.setMinutes(minutes);
 
         let currentTime = new Date();
-        //console.log(currentTime.getTime() + " CURRENTIME");
         let timeDiff = dateObj.getTime() - currentTime.getTime();
-        //console.log(timeDiff);
         if (timeDiff > 0) {
           setTimeout(function () {
             if (this.terapia[i].farmaco === nomeFarmaco) {
@@ -236,7 +231,6 @@ export default {
       }
     },
 
-    // delete task
     async deleteTask(index) {
       const data = {
         email: sessionStorage.getItem("email_paziente"),
@@ -244,9 +238,7 @@ export default {
       };
 
       await axios.post("http://localhost:5002/deleteTask", data).then(
-        //modificare
         (res) => {
-          console.log(res.data);
           if (res.status === 200) {
             const message = encrypt(this.tasks[index].evento);
             this.tasks.splice(index, 1);
@@ -264,7 +256,6 @@ export default {
       );
     },
 
-    // Add Task
     async SubmitTask() {
       if (this.task.length === 0) {
         return;
@@ -313,7 +304,6 @@ export default {
         this.getMemos(sessionStorage.getItem("email"));
         this.getFarmaci(sessionStorage.getItem("email"));
         if (this.checkFlag()) {
-          // checkFlag() permette di far eseguire la parte dell'if solo una volta all'inizio
           this.setAlertsFarmaci();
           this.setAlertsTasks();
 
@@ -402,7 +392,7 @@ export default {
 
     setAlertTaskFromMqtt(message) {
       const data = JSON.parse(message.toString());
-      console.log(data); // Parse JSON message into an object
+      console.log(data);
 
       const dateParts = data.data.split("/");
       const date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
@@ -438,11 +428,10 @@ export default {
     },
 
     setAlertDrugFromMqtt(message) {
-      //console.log(topicMemo + " " + message);
       console.log("drug mqtt triggered");
 
       const data = JSON.parse(message.toString());
-      console.log(data); // Parse JSON message into an object
+      console.log(data);
 
       const medicinale = {
         farmaco: decrypt(data.farmaco),
@@ -554,7 +543,7 @@ export default {
             const promemoria = {
               evento: decrypt(documents[i].evento),
               orario: decrypt(documents[i].orario),
-              data: documents[i].data.substr(0, 10), //substr aggiusta data
+              data: documents[i].data.substr(0, 10), 
             };
             this.tasks.push(promemoria);
           }
