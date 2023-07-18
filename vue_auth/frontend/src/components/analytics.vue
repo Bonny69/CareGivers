@@ -47,6 +47,7 @@ export default {
             systolic: data.systolic,
             diastolic: data.diastolic,
           };
+          console.log(pv);
 
           this.createChart();
           this.updateChartData(pv);
@@ -88,7 +89,6 @@ export default {
     }
   },
   beforeUnmount() {
-    conesole.log();
     window.removeEventListener("beforeunload", this.handleBeforeUnload);
   },
 

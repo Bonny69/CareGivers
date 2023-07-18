@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     async fetchPatients() {
-      //console.log(sessionStorage.getItem("email"));
       const email = {
         email_caregiver: sessionStorage.getItem("email"),
       };
@@ -50,7 +49,6 @@ export default {
 
           const documents = response.data;
           for (let i = 0; i < documents.length; i++) {
-            //console.log(decrypt(documents[i].patient));
             const info = await this.getInfo(documents[i].patient);
             const patient = {
               name: info.nome.toUpperCase(),
@@ -80,6 +78,7 @@ export default {
         return info;
       } catch (error) {
         console.error(error);
+        alert("errore, prego riavviare");
         throw new Error("Failed to fetch user information");
       }
     },
