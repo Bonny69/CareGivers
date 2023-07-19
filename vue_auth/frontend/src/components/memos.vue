@@ -284,7 +284,7 @@ export default {
 
               const topic = sessionStorage.getItem("email_paziente") + "/task";
 
-              console.log(topic + " TOPIC TASK MQTT");
+              //console.log(topic + " TOPIC TASK MQTT");
               this.client.publish(topic, JSON.stringify(memoCiphered));
               alert("promemoria inserito correttamente");
             }
@@ -543,7 +543,7 @@ export default {
             const promemoria = {
               evento: decrypt(documents[i].evento),
               orario: decrypt(documents[i].orario),
-              data: documents[i].data.substr(0, 10), 
+              data: documents[i].data.substr(0, 10),
             };
             this.tasks.push(promemoria);
           }
