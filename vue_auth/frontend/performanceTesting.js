@@ -219,6 +219,16 @@ function startWorkerThread(methodId, callback) {
 let timesinsertMemo = []
 let timesinsertDrug = []
 let timesdeleteDrug  = []
+let timesDeleteTask = []
+let timesGetMedia = []
+let timesGetPazientiHome = []
+let timesGetInfoUser = []
+let timesInsertAlerts = []
+let timesCreateOtp = []
+let timesCheckOtp = []
+let timesGetDataFromMongoDb = []
+let timesInsertPvs = []
+let timesSignUp = []
 
 
 
