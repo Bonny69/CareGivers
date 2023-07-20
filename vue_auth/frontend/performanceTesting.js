@@ -216,6 +216,11 @@ function startWorkerThread(methodId, callback) {
     }
   });
 }
+let timesinsertMemo = []
+let timesinsertDrug = []
+let timesdeleteDrug  = []
+
+
 
 // Function to simulate calling a method
 function simulateMethod(methodId) {
@@ -224,6 +229,7 @@ function simulateMethod(methodId) {
   switch (methodId) {
     case 1:
       result = insertMemo();
+      times[1]
       break;
     case 2:
       result = insertDrug();
@@ -258,7 +264,7 @@ function simulateMethod(methodId) {
     case 12:
          result = insertPvs()
          break;
-    case 3:
+    case 13:
          result = signUp()
          break;
     default:
@@ -268,8 +274,8 @@ function simulateMethod(methodId) {
 }
 
 // Measure the execution time for multiple threads and methods
-const NUM_THREADS = 5;
-const NUM_METHODS = 2;
+const NUM_THREADS = 100;
+const NUM_METHODS = 13;
 
 let completedThreads = 0;
 
