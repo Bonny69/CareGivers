@@ -216,6 +216,20 @@ function startWorkerThread(methodId, callback) {
     }
   });
 }
+
+let isAddingElement = false;
+async function addElement(element,list) {
+  while (isAddingElement) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+
+  isAddingElement = true; 
+  list.push(element);
+
+  isAddingElement = false;
+}
+
+
 let timesinsertMemo = []
 let timesinsertDrug = []
 let timesdeleteDrug  = []
@@ -239,43 +253,55 @@ function simulateMethod(methodId) {
   switch (methodId) {
     case 1:
       result = insertMemo();
-      times[1]
+      addElement(result,timesinsertMemo)
       break;
     case 2:
       result = insertDrug();
+      addElement(result,timesinsertDrug)
       break;
     case 3:
         result = deleteDrug()
+        addElement(result,timesdeleteDrug)
         break;
     case 4:
         result = deleteTask()
+        addElement(result,timesDeleteTask)
         break;
     case 5:
         result = getMedia()
+        addElement(result,timesGetMedia)
         break;
     case 6:
         result = getPazientiHome()
+        addElement(result,timesGetPazientiHome)
         break;
     case 7:
         result = getInfoUser()
+        addElement(result,timesGetInfoUser)
         break;
     case 8:
         result = insertAlerts()
+        addElement(result,timesInsertAlerts)
         break;
     case 9:
         result = createOtp()
+        addElement(result,timesCreateOtp)
         break;
     case 10:
         result = checkOtp()
+        addElement(result,timesCheckOtp)
         break;
     case 11:
          result = getDataFromMongoDb()
+         addElement(result,timesGetDataFromMongoDb)
          break;
     case 12:
          result = insertPvs()
+         addElement(result,timesInsertPvs)
          break;
     case 13:
          result = signUp()
+         addElement(result,timesSignUp)
          break;
     default:
       result = { message: `Unknown method: ${methodId}` };
