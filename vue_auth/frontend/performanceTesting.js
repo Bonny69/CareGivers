@@ -198,7 +198,6 @@ async function signUp(){
   return endTime-startTime
 }
 
-// Function to create and start a worker thread for a given method
 function startWorkerThread(methodId, callback) {
   const worker = new Worker(__filename, { workerData: methodId });
 
@@ -217,16 +216,32 @@ function startWorkerThread(methodId, callback) {
   });
 }
 
-let isAddingElement = false;
-async function addElement(element,list) {
-  while (isAddingElement) {
+const locks = {
+ isAddingElementMemo : false,
+ isAddingElementInserDrug : false,
+ isAddingElementDeleteDrug : false,
+ isAddingElementDeleteTask : false,
+ isAddingElementGetMedia : false,
+ isAddingElementGetPazientiHome : false,
+ isAddingElementGetInfoUser : false,
+ isAddingElementTimesInsertAlerts : false,
+ isAddingElementTimesCreateOtp : false,
+ isAddingElementCheckOtp : false,
+ isAddingElementGetDataFromMongoDb : false,
+ isAddingElementTimesInsertPvs : false,
+ isAddingElementTimesSignUp : false
+}
+
+async function addElement(element,list,lock) {
+
+  while (lock) {
     await new Promise((resolve) => setTimeout(resolve, 10));
   }
 
-  isAddingElement = true; 
+  lock = true; 
   list.push(element);
 
-  isAddingElement = false;
+  lock = false;
 }
 
 
