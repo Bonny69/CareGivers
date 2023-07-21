@@ -23,6 +23,7 @@
           worker.on('message', (message) => {
             const result = message.result
             console.log('Result from the worker thread:', result);
+            resolve()
           });
         });
     

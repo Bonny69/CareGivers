@@ -20,11 +20,6 @@ let locks = {
     isAddingElementTimesSignUp : false
    }
 
-
-   function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
    async function executeMethods(){
     let timesinsertMemo = []
     let timesinsertDrug = []
@@ -40,89 +35,56 @@ let locks = {
     let timesInsertPvs = []
     let timesSignUp = []
 
-    for(i=0;i<100;i++){
-      timesinsertMemo.push(await insertMemo()) 
-      await delay(100);
-    }
+    const promises = [];
 
     for(i=0;i<100;i++){
-      timesinsertDrug.push(await insertDrug())
-      await delay(100);
+    promises.push(signUp().then((time) => timesSignUp.push(time)));
+    promises.push(getInfoUser().then((time) => timesGetInfoUser.push(time)));
+    //promises.push(createOtp().then((time) => timesCreateOtp.push(time)));
+    //promises.push(checkOtp().then((time) => timesCheckOtp.push(time)));
+    promises.push(getPazientiHome().then((time) => timesGetPazientiHome.push(time)));
+    promises.push(insertMemo().then((time) => timesinsertMemo.push(time)));
+    promises.push(insertDrug().then((time) => timesinsertDrug.push(time)));
+    promises.push(deleteDrug().then((time) => timesdeleteDrug.push(time)));
+    promises.push(deleteTask().then((time) => timesDeleteTask.push(time)));
+    promises.push(getMedia().then((time) => timesGetMedia.push(time)));
+    promises.push(insertAlerts().then((time) => timesInsertAlerts.push(time)));
+    promises.push(getDataFromMongoDb().then((time) => timesGetDataFromMongoDb.push(time)));
+    promises.push(insertPvs().then((time) => timesInsertPvs.push(time)));
     }
 
-    for(i=0;i<80;i++){
-      timesdeleteDrug.push(await deleteDrug())
-      await delay(100);
-    }
+  // Wait for all the promises to complete
+  await Promise.all(promises);
 
-    for(i=0;i<80;i++){
-      timesDeleteTask.push(await deleteTask())
-      await delay(100);
-    }
-  
-    for(i=0;i<100;i++){
-      timesGetMedia.push(await getMedia())
-      await delay(100);
-    }
+  // Calculate the averages
+  let resultMemo = calculateAverage(timesinsertMemo);
+  let resultDrug = calculateAverage(timesinsertDrug);
+  let resultDeleteDrug = calculateAverage(timesdeleteDrug);
+  let resultDeleteTask = calculateAverage(timesDeleteTask);
+  let resultGetMedia = calculateAverage(timesGetMedia);
+  let resultgetPazientiHome = calculateAverage(timesGetPazientiHome);
+  let resultGetInfoUser = calculateAverage(timesGetInfoUser);
+  let resultInsertAlerts = calculateAverage(timesInsertAlerts);
+  //let resultcreateOtp = calculateAverage(timesCreateOtp);
+  let resultGetDataFromMongoDb = calculateAverage(timesGetDataFromMongoDb);
+  let resultInsertPvs = calculateAverage(timesInsertPvs);
+  let resultSignUp = calculateAverage(timesSignUp);
 
-    for(i=0;i<100;i++){
-      timesGetPazientiHome.push(await getPazientiHome())
-      await delay(100);
-    }
-
-    for(i=0;i<100;i++){
-      timesGetInfoUser.push(await getInfoUser())
-      await delay(100);
-    }
-
-    for(i=0;i<100;i++){
-      timesInsertAlerts.push(await insertAlerts())
-      await delay(100);
-   }
-
-    for(i=0;i<100;i++){
-      timesCreateOtp.push(await createOtp())
-      await delay(100);
-    }
-
-    for(i=0;i<80;i++){
-      timesCheckOtp.push(await checkOtp())
-      await delay(100);
-    }
-
-    for(i=0;i<100;i++){
-      timesGetDataFromMongoDb.push(await getDataFromMongoDb())
-      await delay(100);
-    }
-
-    for(i=0;i<100;i++){
-      timesInsertPvs.push(await insertPvs())
-      await delay(100);
-    }
-
-    for(i=0;i<100;i++){
-      timesSignUp.push(await signUp())
-      await delay(100);
-    }
-
-    let resultMemo = calculateAverage(timesinsertMemo)
-    let resultDrug = calculateAverage(timesinsertDrug)
-    let resultDeleteDrug = calculateAverage(timesdeleteDrug)
-    let resultDeleteTask = calculateAverage(timesDeleteTask)
-    let resultGetMedia = calculateAverage(timesGetMedia)
-    let resultgetPazientiHome = calculateAverage(timesGetPazientiHome)
-    let resultGetInfoUser = calculateAverage(timesGetInfoUser)
-    let resultInsertAlerts = calculateAverage(timesInsertAlerts)
-    let resultcreateOtp = calculateAverage(timesCreateOtp)
-    let resultGetDataFromMongoDb = calculateAverage(timesGetDataFromMongoDb)
-    let resultInsertPvs = calculateAverage(timesInsertPvs)
-    let resultSignUp = calculateAverage(timesSignUp)
-
-    result = [resultMemo,resultDrug,resultDeleteDrug,resultDeleteTask,
-             resultGetMedia,resultgetPazientiHome,resultGetInfoUser,resultInsertAlerts
-             ,resultcreateOtp, resultGetDataFromMongoDb,resultInsertPvs,resultSignUp]
-    parentPort.postMessage({result})
-
+  result = [
+    resultMemo,
+    resultDrug,
+    resultDeleteDrug,
+    resultDeleteTask,
+    resultGetMedia,
+    resultgetPazientiHome,
+    resultGetInfoUser,
+    resultInsertAlerts,
+    //resultcreateOtp,
+    resultGetDataFromMongoDb,
+    resultInsertPvs,
+    resultSignUp
+  ];
+  parentPort.postMessage({ result });
 }
 
 function calculateAverage(arr) {
