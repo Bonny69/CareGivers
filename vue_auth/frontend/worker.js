@@ -36,21 +36,23 @@ let locks = {
     let timesSignUp = []
 
     const promises = [];
-
-    for(i=0;i<100;i++){
-    promises.push(signUp().then((time) => timesSignUp.push(time)));
-    promises.push(getInfoUser().then((time) => timesGetInfoUser.push(time)));
     //promises.push(createOtp().then((time) => timesCreateOtp.push(time)));
     //promises.push(checkOtp().then((time) => timesCheckOtp.push(time)));
+
+    for(i=0;i<1;i++){
+    promises.push(signUp().then((time) => timesSignUp.push(time)));
+    promises.push(getInfoUser().then((time) => timesGetInfoUser.push(time)));
     promises.push(getPazientiHome().then((time) => timesGetPazientiHome.push(time)));
-    promises.push(insertMemo().then((time) => timesinsertMemo.push(time)));
-    promises.push(insertDrug().then((time) => timesinsertDrug.push(time)));
+    for(j=0;j<2;j++){
+      promises.push(insertMemo().then((time) => timesinsertMemo.push(time)));
+      promises.push(insertDrug().then((time) => timesinsertDrug.push(time)));
+      promises.push(insertPvs().then((time) => timesInsertPvs.push(time)));
+    }
     promises.push(deleteDrug().then((time) => timesdeleteDrug.push(time)));
     promises.push(deleteTask().then((time) => timesDeleteTask.push(time)));
     promises.push(getMedia().then((time) => timesGetMedia.push(time)));
     promises.push(insertAlerts().then((time) => timesInsertAlerts.push(time)));
     promises.push(getDataFromMongoDb().then((time) => timesGetDataFromMongoDb.push(time)));
-    promises.push(insertPvs().then((time) => timesInsertPvs.push(time)));
     }
 
   // Wait for all the promises to complete
@@ -169,8 +171,8 @@ async function deleteTask() {
 async function getMedia() {
   const data = {
     collection: '771c2c3afda9151482bee26ec7052f98' + '/vitalparameters',
-    firstDate: '16/07/2023',
-    secondDate: '18/08/2023',
+    firstDate: '20/07/2023',
+    secondDate: '21/08/2023',
     parametro: 'fc',
   };
   try {
