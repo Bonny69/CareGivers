@@ -5,7 +5,6 @@
   "scripts": {
     "frontend": "vue-cli-service serve"
   },
-
   "dependencies": {
     "@bachdgvn/vue-otp-input": "^1.0.8",
     "@canvasjs/vue-charts": "^1.0.1",
@@ -16,7 +15,7 @@
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "chart.js": "^2.9.4",
-    "core-js": "^3.8.3",
+    "core-js": "^3.31.1",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "jsonschema": "^1.2.6",
