@@ -11,7 +11,6 @@
       }
     }
 
-
     async function simulateThreads() {
       const workerPromises = [];
     
@@ -21,8 +20,9 @@
     
         // Wrap the worker event handling in a promise and push it to the workerPromises array
         const workerPromise = new Promise((resolve) => {
-          worker.on('message', (event) => {
-            resolve(event.data);
+          worker.on('message', (message) => {
+            const result = message.result
+            console.log('Result from the worker thread:', result);
           });
         });
     
