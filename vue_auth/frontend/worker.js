@@ -40,67 +40,67 @@ let locks = {
     let timesInsertPvs = []
     let timesSignUp = []
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesinsertMemo.push(await insertMemo()) 
       await delay(100);
     }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesinsertDrug.push(await insertDrug())
       await delay(100);
     }
 
-    for(i=0;i<5;i++){
+    for(i=0;i<80;i++){
       timesdeleteDrug.push(await deleteDrug())
       await delay(100);
     }
 
-    for(i=0;i<5;i++){
+    for(i=0;i<80;i++){
       timesDeleteTask.push(await deleteTask())
       await delay(100);
     }
   
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesGetMedia.push(await getMedia())
       await delay(100);
     }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesGetPazientiHome.push(await getPazientiHome())
       await delay(100);
     }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesGetInfoUser.push(await getInfoUser())
       await delay(100);
     }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesInsertAlerts.push(await insertAlerts())
       await delay(100);
    }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesCreateOtp.push(await createOtp())
       await delay(100);
     }
 
-    for(i=0;i<8;i++){
+    for(i=0;i<80;i++){
       timesCheckOtp.push(await checkOtp())
       await delay(100);
     }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesGetDataFromMongoDb.push(await getDataFromMongoDb())
       await delay(100);
     }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesInsertPvs.push(await insertPvs())
       await delay(100);
     }
 
-    for(i=0;i<10;i++){
+    for(i=0;i<100;i++){
       timesSignUp.push(await signUp())
       await delay(100);
     }
