@@ -2,7 +2,7 @@ const { parentPort, workerData } = require('worker_threads');
 const axios = require('axios');
 let numeroTask = 0;
 let numeroDrug = 0; 
-let otp = 10000;
+let otp = 10001;
 let signUpNumber = 0;
 let locks = {
     isAddingElementMemo : false,
@@ -33,27 +33,28 @@ let locks = {
     let timesCheckOtp = []
     let timesGetDataFromMongoDb = []
     let timesInsertPvs = []
-    let timesSignUp = []
+    let timesLogin = []
 
     const promises = [];
-    //promises.push(createOtp().then((time) => timesCreateOtp.push(time)));
-    //promises.push(checkOtp().then((time) => timesCheckOtp.push(time)));
+    
 
-    for(i=0;i<1;i++){
-    promises.push(signUp().then((time) => timesSignUp.push(time)));
+    
+    promises.push(login().then((time) => timesLogin.push(time)));
     promises.push(getInfoUser().then((time) => timesGetInfoUser.push(time)));
     promises.push(getPazientiHome().then((time) => timesGetPazientiHome.push(time)));
-    for(j=0;j<2;j++){
-      promises.push(insertMemo().then((time) => timesinsertMemo.push(time)));
-      promises.push(insertDrug().then((time) => timesinsertDrug.push(time)));
-      promises.push(insertPvs().then((time) => timesInsertPvs.push(time)));
-    }
+    
+    promises.push(insertMemo().then((time) => timesinsertMemo.push(time)));
+    promises.push(insertDrug().then((time) => timesinsertDrug.push(time)));
+    promises.push(insertPvs().then((time) => timesInsertPvs.push(time)));
+    promises.push(createOtp().then((time) => timesCreateOtp.push(time)));
+    promises.push(checkOtp().then((time) => timesCheckOtp.push(time)));
+    
     promises.push(deleteDrug().then((time) => timesdeleteDrug.push(time)));
     promises.push(deleteTask().then((time) => timesDeleteTask.push(time)));
     promises.push(getMedia().then((time) => timesGetMedia.push(time)));
     promises.push(insertAlerts().then((time) => timesInsertAlerts.push(time)));
     promises.push(getDataFromMongoDb().then((time) => timesGetDataFromMongoDb.push(time)));
-    }
+    
 
   // Wait for all the promises to complete
   await Promise.all(promises);
@@ -67,10 +68,11 @@ let locks = {
   let resultgetPazientiHome = calculateAverage(timesGetPazientiHome);
   let resultGetInfoUser = calculateAverage(timesGetInfoUser);
   let resultInsertAlerts = calculateAverage(timesInsertAlerts);
-  //let resultcreateOtp = calculateAverage(timesCreateOtp);
+  let resultcreateOtp = calculateAverage(timesCreateOtp);
   let resultGetDataFromMongoDb = calculateAverage(timesGetDataFromMongoDb);
   let resultInsertPvs = calculateAverage(timesInsertPvs);
-  let resultSignUp = calculateAverage(timesSignUp);
+  let resultLogin = calculateAverage(timesSignUp);
+  let resultCheckOtp = calculateAverage(timesCheckOtp)
 
   result = [
     resultMemo,
@@ -81,10 +83,11 @@ let locks = {
     resultgetPazientiHome,
     resultGetInfoUser,
     resultInsertAlerts,
-    //resultcreateOtp,
+    resultcreateOtp,
+    resultCheckOtp ,
     resultGetDataFromMongoDb,
     resultInsertPvs,
-    resultSignUp
+    resultLogin
   ];
   parentPort.postMessage({ result });
 }
@@ -101,6 +104,17 @@ function calculateAverage(arr) {
   
     const average = sum / arr.length;
     return average;
+  }
+
+  async function login(){
+    let loggedUser = {
+      email: encrypt('a@gmail.com'),
+      password: encrypt('ciao'),
+    };
+    const startTime = Date.now()
+    await axios.post("http://localhost:5000/login", loggedUser)
+    const endTime = Date.now()
+    return endTime-startTime
   }
 
 async function insertMemo() {
@@ -250,7 +264,7 @@ async function createOtp(){
 
 async function checkOtp(){
   const data = {
-    otp: otp.toString(),
+    otp: '10000',
     email_paziente: '771c2c3afda9151482bee26ec7052f98',
     email_caregiver: '3cf69e2d70eedc2100b8d2b303d49792',
   };
@@ -258,7 +272,6 @@ async function checkOtp(){
     const startTime = Date.now()
     axios.post("http://localhost:5001/checkOtp", data)
     const endTime = Date.now()
-    otp--
     return endTime-startTime
   } catch (error) {
     console.log(error)
