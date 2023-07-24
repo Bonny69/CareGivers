@@ -539,13 +539,15 @@ export default {
         .then((response) => {
           const documents = response.data;
 
-          for (let i = 0; i < documents.length; i++) {
-            const promemoria = {
-              evento: decrypt(documents[i].evento),
-              orario: decrypt(documents[i].orario),
-              data: documents[i].data.substr(0, 10), 
-            };
-            this.tasks.push(promemoria);
+          if (documents.length > 0) {
+            for (let i = 0; i < documents.length; i++) {
+              const promemoria = {
+                evento: decrypt(documents[i].evento),
+                orario: decrypt(documents[i].orario),
+                data: documents[i].data.substr(0, 10),
+              };
+              this.tasks.push(promemoria);
+            }
           }
         });
     },
@@ -558,13 +560,15 @@ export default {
         .then((response) => {
           const documents = response.data;
 
-          for (let i = 0; i < documents.length; i++) {
-            const farmaco = {
-              farmaco: decrypt(documents[i].farmaco),
-              orario: decrypt(documents[i].orario),
-              dosaggio: documents[i].dosaggio,
-            };
-            this.terapia.push(farmaco);
+          if (documents.length > 0) {
+            for (let i = 0; i < documents.length; i++) {
+              const farmaco = {
+                farmaco: decrypt(documents[i].farmaco),
+                orario: decrypt(documents[i].orario),
+                dosaggio: documents[i].dosaggio,
+              };
+              this.terapia.push(farmaco);
+            }
           }
         });
     },
