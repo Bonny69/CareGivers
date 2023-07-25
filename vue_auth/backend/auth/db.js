@@ -3,7 +3,7 @@ mongoose.set('strictQuery', false);
 // Function to connect to 'Users' collection
 const connectToUsersCollection = async () => {
  try {
-    mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/Users?retryWrites=true&w=majority');
+    await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/Users?retryWrites=true&w=majority');
     console.log('Connected to Users collection');
   } catch (error) {
     console.log(error);

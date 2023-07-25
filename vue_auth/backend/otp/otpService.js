@@ -1,30 +1,26 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = 'mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority';
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
 mongoose.set('strictQuery', false);
-const router = require('express').Router();
-
-
 const app = express()
 const port = process.env.port || 5001;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
+
 const {connectToAssociazioniCollection} = require('../auth/db')
 connectToAssociazioniCollection()
+
 const { otp } = require('./otp.js');
 const { patient_caregivers } = require('./patient_associated_caregivers.js');
 const { caregivers_patient } = require('./caregivers_associated_patients.js');
 
+
   app.post('/insertOtp', async (req,res) =>{
     console.log('DENTRO INSERT OTP SERVER')
-  
     try{
-      
       const Otp = new otp({
         email: req.body.email,
         otp: req.body.otp
@@ -45,7 +41,6 @@ const { caregivers_patient } = require('./caregivers_associated_patients.js');
     console.log('DENTRO CHECK OTP SERVER')
 
     try {
-
       const match = await otp.findOne({email:req.body.email_paziente, otp: req.body.otp})
       console.log(match)
       if(match!=null){
@@ -74,7 +69,7 @@ const { caregivers_patient } = require('./caregivers_associated_patients.js');
   })
 
   app.post('/home',  async (req, res) => {
-  
+
     try {
       const result = await caregivers_patient.find({caregiver: req.body.email_caregiver});
       return res.json(result);

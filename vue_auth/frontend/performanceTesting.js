@@ -1,4 +1,4 @@
-    const NUM_THREADS = 80;
+    const NUM_THREADS = 50;
     const { Worker, isMainThread, parentPort } = require('worker_threads'); 
 
 
