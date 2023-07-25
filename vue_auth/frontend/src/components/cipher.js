@@ -14,4 +14,4 @@ const crypto = require('crypto');
   return decrypted;
 }
 
-module.exports = { encrypt };
+module.exports = { encrypt, decrypt };

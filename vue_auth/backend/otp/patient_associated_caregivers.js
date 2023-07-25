@@ -10,6 +10,6 @@ const userSchema = new schema({
         caregiver3: String
      }
 })
-userSchema.index({ email: 1 });
+//userSchema.index({ email: 1 });
 const patient_caregivers = mongoose.model('patient_caregivers',userSchema);
 module.exports = { patient_caregivers };

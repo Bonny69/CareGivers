@@ -19,7 +19,7 @@ let locks = {
     isAddingElementCheckOtp : false,
     isAddingElementGetDataFromMongoDb : false,
     isAddingElementTimesInsertPvs : false,
-    isAddingElementTimesSignUp : false
+    isAddingElementLogin : false
    }
 
    async function executeMethods(){
@@ -39,19 +39,71 @@ let locks = {
 
     const promises = [];
     
-    promises.push(login().then((time) => timesLogin.push(time)))
-    promises.push(getInfoUser().then((time) => timesGetInfoUser.push(time)));
-    promises.push(createOtp().then((time) => timesCreateOtp.push(time)));
-    promises.push(checkOtp().then((time) => timesCheckOtp.push(time)));
-    promises.push(getPazientiHome().then((time) => timesGetPazientiHome.push(time)))
-    promises.push(insertMemo().then((time) => timesinsertMemo.push(time)));
-    promises.push(insertDrug().then((time) => timesinsertDrug.push(time)));
-    promises.push(deleteDrug().then((time) => timesdeleteDrug.push(time)));
-    promises.push(deleteTask().then((time) => timesDeleteTask.push(time)));
-    promises.push(getMedia().then((time) => timesGetMedia.push(time)));
-    promises.push(insertAlerts().then((time) => timesInsertAlerts.push(time)));
-    promises.push(getDataFromMongoDb().then((time) => timesGetDataFromMongoDb.push(time)));
-    promises.push(insertPvs().then((time) => timesInsertPvs.push(time)));
+    promises.push(login().then((time) =>{
+      acquireLock('isAddingElementLogin')
+      timesLogin.push(time)
+      releaseLock('isAddingElementLogin')
+    }))
+    promises.push(getInfoUser().then((time) => {
+      acquireLock('isAddingElementGetInfoUser')
+      timesGetInfoUser.push(time)
+      releaseLock('isAddingElementGetInfoUser')
+    }));
+    promises.push(createOtp().then((time) => {
+      acquireLock('isAddingElementTimesCreateOtp')
+      timesCreateOtp.push(time)
+      releaseLock('isAddingElementTimesCreateOtp')
+    }));
+    promises.push(checkOtp().then((time) =>{
+      acquireLock('isAddingElementCheckOtp')
+      timesCheckOtp.push(time)
+      releaseLock('isAddingElementCheckOtp')
+    }));
+    promises.push(getPazientiHome().then((time) =>{ 
+      acquireLock('isAddingElementGetPazientiHome')
+      timesGetPazientiHome.push(time)
+      releaseLock('isAddingElementGetPazientiHome')
+    }))
+    promises.push(insertMemo().then((time) =>{
+      acquireLock('isAddingElementMemo')
+      timesinsertMemo.push(time)
+      releaseLock('isAddingElementMemo')
+    }));
+    promises.push(insertDrug().then((time) =>{
+      acquireLock('isAddingElementInserDrug')
+       timesinsertDrug.push(time)
+       releaseLock('isAddingElementInserDrug')
+      }));
+    promises.push(deleteDrug().then((time) =>{ 
+      acquireLock('isAddingElementDeleteDrug')
+      timesdeleteDrug.push(time)
+      releaseLock('isAddingElementDeleteDrug')
+    }));
+    promises.push(deleteTask().then((time) =>{
+      acquireLock('isAddingElementDeleteTask')
+      timesDeleteTask.push(time)
+      releaseLock('isAddingElementDeleteTask')
+    }));
+    promises.push(getMedia().then((time) =>{
+      acquireLock('isAddingElementGetMedia')
+      timesGetMedia.push(time)
+      releaseLock('isAddingElementGetMedia')
+    }));
+    promises.push(insertAlerts().then((time) =>{
+      acquireLock('isAddingElementTimesInsertAlerts')
+      timesInsertAlerts.push(time)
+      releaseLock('isAddingElementTimesInsertAlerts')
+    }));
+    promises.push(getDataFromMongoDb().then((time) =>{
+      acquireLock('isAddingElementGetDataFromMongoDb')
+      timesGetDataFromMongoDb.push(time)
+      releaseLock('isAddingElementGetDataFromMongoDb')
+    }));
+    promises.push(insertPvs().then((time) =>{
+      acquireLock('isAddingElementTimesInsertPvs')
+      timesInsertPvs.push(time)
+      releaseLock('isAddingElementTimesInsertPvs')
+    }));
     
 
   // Wait for all the promises to complete
@@ -199,7 +251,7 @@ function calculateAverage(arr) {
   
    async function getPazientiHome() {
     const email = {
-      email_caregiver: '3cf69e2d70eedc2100b8d2b303d49792',
+      email_caregiver: '3cf69e2d70eedc2100b8d2b303d49793',
     };
     try {
       const startTime = Date.now();
@@ -234,8 +286,8 @@ function calculateAverage(arr) {
       systolic: '150',
       diastolic: '110',
     };
-    const startTime = Date.now();
     try {
+      const startTime = Date.now();
       await axios.post("http://localhost:5005/insertAlerts", data);
       const endTime = Date.now();
       countAlert++;
@@ -262,7 +314,7 @@ async function createOtp() {
   otp++;
   const data = {
     otp: otp.toString(),
-    email: '771c2c3afda9151482bee26ec7052f98',
+    email: generateRandomString(15)
   };
   const startTime = Date.now();
   try {
@@ -277,7 +329,7 @@ async function createOtp() {
 async function checkOtp() {
   const data = {
     otp: '10000',
-    email_paziente: '771c2c3afda9151482bee26ec7052f98',
+    email_paziente: '771c2c3afda9151482bee26ec7052f88',
     email_caregiver: '3cf69e2d70eedc2100b8d2b303d49792',
   };
   try {
@@ -342,6 +394,16 @@ async function insertPvs() {
   } catch (error) {
     console.log(error);
   }
+}
+
+function acquireLock(lockName){
+  while (locks[lockName]) {
+  }
+  locks[lockName] = true;
+}
+
+function releaseLock(lockName) {
+  locks[lockName] = false;
 }
 
 
