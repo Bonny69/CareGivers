@@ -12,11 +12,13 @@
     </button>
     <div class="analitiche">
       <div class="header">
-        <h1>STATISTICHE</h1>
+        <h1 style="color: white; margin-bottom: 20px">STATISTICHE</h1>
         <hr />
-        <div class="message">{{ message }}</div>
-        <div style="margin-top: 40px; font-size: large" v-if="avg !== null">
-          {{ avg }}
+        <div class="message" :class="{ 'centered-message': avg !== null }">
+          {{ message }}
+        </div>
+        <div class="avg-container" v-if="avg !== null">
+          <div class="avg-text">{{ avg }}</div>
         </div>
       </div>
       <div class="input-container">
@@ -138,9 +140,7 @@ export default {
         console.log(data);
         axios.post("http://localhost:5005/getMedia", data).then((res) => {
           if (res.status === 200) {
-            const stringa =
-              "La media dei valori rilevati per il periodo selezionato è di " +
-              parseInt(res.data[0].averageField);
+            const stringa = parseInt(res.data[0].averageField) + "/min";
             this.avg = stringa;
           }
         });
@@ -156,6 +156,29 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 50px;
+}
+
+.analitiche .header {
+  padding-top: 30px;
+  position: relative;
+}
+
+.centered-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.avg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.avg-text {
+  font-size: 50px;
 }
 
 button#alert {
@@ -183,10 +206,15 @@ button#alert.button-hover {
   width: 700px;
   max-height: 550px;
   max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .analitiche .header {
   padding-top: 30px;
+  position: relative;
+  flex: 1;
 }
 
 .analitiche h1 {
