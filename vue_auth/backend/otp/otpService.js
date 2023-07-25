@@ -14,28 +14,16 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
-
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-
-
-const database = async () => {
-    try {
-       await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/associazioni?retryWrites=true&w=majority')
-      console.log('DB connected')
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  database();
+const {connectToAssociazioniCollection} = require('../auth/db')
+connectToAssociazioniCollection()
+const { otp } = require('./otp.js');
+const { patient_caregivers } = require('./patient_associated_caregivers.js');
+const { caregivers_patient } = require('./caregivers_associated_patients.js');
 
   app.post('/insertOtp', async (req,res) =>{
     console.log('DENTRO INSERT OTP SERVER')
-    database();
   
     try{
-      //console.log(req.body.otp)
-      //console.log(req.body.email)
-      const { otp } = require('./otp.js');
       
       const Otp = new otp({
         email: req.body.email,
@@ -55,10 +43,6 @@ const database = async () => {
 
   app.post('/checkOtp', async (req,res) => {
     console.log('DENTRO CHECK OTP SERVER')
-    database();
-    const { otp } = require('./otp.js');
-    const { patient_caregivers } = require('./patient_associated_caregivers.js');
-    const { caregivers_patient } = require('./caregivers_associated_patients.js');
 
     try {
 
@@ -90,9 +74,6 @@ const database = async () => {
   })
 
   app.post('/home',  async (req, res) => {
-    console.log('dentro home server');
-    const { caregivers_patient } = require('./caregivers_associated_patients.js');
-    console.log(caregivers_patient)
   
     try {
       const result = await caregivers_patient.find({caregiver: req.body.email_caregiver});

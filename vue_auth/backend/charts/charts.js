@@ -7,22 +7,18 @@ const cors = require('cors');
 mongoose.set('strictQuery', false);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+
 const app = express()
 const port = process.env.port || 5005;
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cors());
+const {connectToAlertsCollection} = require('../auth/db')
+connectToAlertsCollection()
+const {parameters} = require('./parameters.js')
+const {alerts} = require('./alerts.js')
 
-const database = async () => {
-  try {
-     await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/alerts?retryWrites=true&w=majority')
-    console.log('DB connected')
-  } catch (error) {
-    console.log(error)
-  }
-}
-database();
 
     app.get('/getData', async (req,res) => {
       const field = req.query.field
@@ -88,7 +84,6 @@ database();
 
     app.post('/insertAlerts', async(req,res) => {
       console.log(req.body)
-      const {alerts} = require('./alerts.js')
       try{
         database()
         const alert = new alerts({
@@ -111,7 +106,6 @@ database();
 
   app.post('/insertPv', async (req,res) => {
     console.log(req.body)
-    const {parameters} = require('./parameters.js')
     try {
       const collezione= req.body.collection
       await client.connect();

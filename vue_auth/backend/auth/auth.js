@@ -10,27 +10,19 @@ const app = express()
 app.use(cors());
 const port = process.env.port || 5000;
 
-const database = async () => {
-  try {
-    await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/Users?retryWrites=true&w=majority');
-    console.log('DB connected');
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 app.use(express.json());
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 express.json()
-database()
+const {connectToUsersCollection} = require('./db')
+connectToUsersCollection()
+const { user } = require('./user.js')
 
 
 app.post('/signup', async (req, res) => {
   console.log('dentro signup server')
   
-  const { user } = require('./user.js')
     const newUser = new user({
         nome: req.body.nome,
         cognome: req.body.cognome,
@@ -55,7 +47,6 @@ app.post('/signup', async (req, res) => {
 });
 
 app.post('/user', async(req,res)=>{
-  const { user } = require('./user.js')
   try {
     const info = await user.findOne({email: req.body.email})
     if(info){
@@ -74,7 +65,6 @@ app.post('/user', async(req,res)=>{
 
 app.post('/login',  async(req,res) =>{
   
-  const { user } = require('./user.js')
   try {
     const User = await user.findOne({ email: req.body.email });
     if(!User){

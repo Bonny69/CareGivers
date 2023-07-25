@@ -5,7 +5,6 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
 mongoose.set('strictQuery', false);
-const router = require('express').Router();
 
 
 const app = express()
@@ -15,18 +14,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-
-
-const database = async () => {
-    try {
-       await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/scheduling?retryWrites=true&w=majority')
-      console.log('DB connected')
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  database();
+const {connectToSchedulingCollection} = require('../auth/db')
+connectToSchedulingCollection();
+const { Memo } = require('./schedule.js')
+const { terapia } = require('./therapy.js')
 
 
   app.post('/insertMemo', async (req,res) => {
@@ -43,7 +34,6 @@ const database = async () => {
 
         const timeDiffInSeconds = Math.floor((selectedDate.getTime() - new Date()) / 1000);
         console.log(timeDiffInSeconds + ' DIFFERENZA SECONDI')
-        const { Memo } = require('./schedule.js')
 
         const schedule = new Memo({
           paziente: req.body.email_paziente,                      
@@ -70,7 +60,6 @@ const database = async () => {
 
 
   app.get('/getMemos', async (req,res) => {
-    const { Memo } = require('./schedule.js')
     console.log(req.query.email)
     try {
       const documents = await Memo.find({paziente: req.query.email});
@@ -86,7 +75,6 @@ const database = async () => {
   app.post('/insertTherapy', async(req,res) => {
 
     console.log('DENTRO INSERT TERAPIA SERVER')
-    const { terapia } = require('./therapy.js')
 
     try {
       const farmaci = new terapia({
@@ -110,7 +98,6 @@ const database = async () => {
 
   app.get('/getTherapy', async (req,res) => {
     console.log('DENTRO GET-Therapy SERVER')
-    const { terapia } = require('./therapy.js')
     console.log(req.query.email)
 
     try { 
@@ -125,7 +112,6 @@ const database = async () => {
 
 
   app.post('/deleteTask', async (req,res) => {
-   const { Memo } = require('./schedule.js')
     console.log(req.body.email)
 
     try {
@@ -141,7 +127,6 @@ const database = async () => {
 
 
   app.post('/deleteDrug', async (req,res) => {
-   const { terapia } = require('./therapy.js')
     console.log(req.body.email)
 
     try {
@@ -158,7 +143,6 @@ const database = async () => {
 
   app.post('/editTask', async (req,res) => {
     console.log('DENTRO modifica task SERVER')
-    const { Memo } = require('./schedule.js')
     console.log(req.body.email)
 
     try {

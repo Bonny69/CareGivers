@@ -38,92 +38,66 @@ let locks = {
     let timesLogin = []
 
     const promises = [];
+
+
+    let resultMemo 
+    let resultDrug 
+    let resultDeleteDrug 
+    let resultDeleteTask 
+    let resultGetMedia 
+    let resultgetPazientiHome 
+    let resultGetInfoUser 
+    let resultInsertAlerts 
+    let resultcreateOtp 
+    let resultGetDataFromMongoDb 
+    let resultInsertPvs 
+    let resultLogin 
+    let resultCheckOtp 
     //for(i=0;i<50;i++){
     promises.push(login().then((time) =>{
-      acquireLock('isAddingElementLogin')
-      timesLogin.push(time)
-      releaseLock('isAddingElementLogin')
+      resultLogin = time
     }))
     promises.push(getInfoUser().then((time) => {
-      acquireLock('isAddingElementGetInfoUser')
-      timesGetInfoUser.push(time)
-      releaseLock('isAddingElementGetInfoUser')
+      resultGetInfoUser = time
     }));
     promises.push(createOtp().then((time) => {
-      acquireLock('isAddingElementTimesCreateOtp')
-      timesCreateOtp.push(time)
-      releaseLock('isAddingElementTimesCreateOtp')
+      resultcreateOtp = time
     }));
     promises.push(checkOtp().then((time) =>{
-      acquireLock('isAddingElementCheckOtp')
-      timesCheckOtp.push(time)
-      releaseLock('isAddingElementCheckOtp')
+      resultCheckOtp = time
     }));
     promises.push(getPazientiHome().then((time) =>{ 
-      acquireLock('isAddingElementGetPazientiHome')
-      timesGetPazientiHome.push(time)
-      releaseLock('isAddingElementGetPazientiHome')
+      resultgetPazientiHome = time
     }))
     promises.push(insertMemo().then((time) =>{
-      acquireLock('isAddingElementMemo')
-      timesinsertMemo.push(time)
-      releaseLock('isAddingElementMemo')
+      resultMemo = time
     }));
     promises.push(insertDrug().then((time) =>{
-      acquireLock('isAddingElementInserDrug')
-       timesinsertDrug.push(time)
-       releaseLock('isAddingElementInserDrug')
+      resultDrug = time
       }));
     promises.push(deleteDrug().then((time) =>{ 
-      acquireLock('isAddingElementDeleteDrug')
-      timesdeleteDrug.push(time)
-      releaseLock('isAddingElementDeleteDrug')
+      resultDeleteDrug = time
     }));
     promises.push(deleteTask().then((time) =>{
-      acquireLock('isAddingElementDeleteTask')
-      timesDeleteTask.push(time)
-      releaseLock('isAddingElementDeleteTask')
+      resultDeleteTask = time
     }));
     promises.push(getMedia().then((time) =>{
-      acquireLock('isAddingElementGetMedia')
-      timesGetMedia.push(time)
-      releaseLock('isAddingElementGetMedia')
+      resultGetMedia = time
     }));
     promises.push(insertAlerts().then((time) =>{
-      acquireLock('isAddingElementTimesInsertAlerts')
-      timesInsertAlerts.push(time)
-      releaseLock('isAddingElementTimesInsertAlerts')
+      resultInsertAlerts = time
     }));
     promises.push(getDataFromMongoDb().then((time) =>{
-      acquireLock('isAddingElementGetDataFromMongoDb')
-      timesGetDataFromMongoDb.push(time)
-      releaseLock('isAddingElementGetDataFromMongoDb')
+      resultGetDataFromMongoDb = time
     }));
     promises.push(insertPvs().then((time) =>{
-      acquireLock('isAddingElementTimesInsertPvs')
-      timesInsertPvs.push(time)
-      releaseLock('isAddingElementTimesInsertPvs')
+      resultInsertPvs = time
     }));
   //}
     
 
   // Wait for all the promises to complete
   await Promise.all(promises);
-
-  // Calculate the averages
-  let resultMemo = calculateAverage(timesinsertMemo);
-  let resultDrug = calculateAverage(timesinsertDrug);
-  let resultDeleteDrug = calculateAverage(timesdeleteDrug);
-  let resultDeleteTask = calculateAverage(timesDeleteTask);
-  let resultGetMedia = calculateAverage(timesGetMedia);
-  let resultgetPazientiHome = calculateAverage(timesGetPazientiHome);
-  let resultGetInfoUser = calculateAverage(timesGetInfoUser);
-  let resultInsertAlerts = calculateAverage(timesInsertAlerts);
-  let resultcreateOtp = calculateAverage(timesCreateOtp);
-  let resultGetDataFromMongoDb = calculateAverage(timesGetDataFromMongoDb);
-  let resultInsertPvs = calculateAverage(timesInsertPvs);
-  let resultLogin = calculateAverage(timesLogin);
-  let resultCheckOtp = calculateAverage(timesCheckOtp)
 
   const result = [
     resultMemo,
