@@ -40,7 +40,7 @@
     "yallist": "^4.0.0"
   },
   "scripts": {
-    "backend": "concurrently \"cd auth && nodemon auth.js\" \"cd otp && nodemon otp.js\" \"cd scheduling && nodemon scheduling.js\" \"cd mqtt && nodemon mqttService.js\" \"cd charts && nodemon charts.js\""
+    "backend": "concurrently \"cd auth && nodemon auth.js\" \"cd otp && nodemon otpService.js\" \"cd scheduling && nodemon scheduling.js\" \"cd mqtt && nodemon mqttService.js\" \"cd charts && nodemon charts.js\""
   },
   "author": "",
   "license": "ISC"

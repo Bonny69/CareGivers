@@ -13,7 +13,7 @@ const userSchema = new schema({
       },
 });
 
-userSchema.index({ timestamp: 1 });
+userSchema.index({ timestamp: -1 });
 
 const parameters = mongoose.model('parameters',userSchema);
 module.exports = { parameters };

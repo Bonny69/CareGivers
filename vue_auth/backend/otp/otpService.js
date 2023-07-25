@@ -33,8 +33,8 @@ const database = async () => {
     database();
   
     try{
-      console.log(req.body.otp)
-      console.log(req.body.email)
+      //console.log(req.body.otp)
+      //console.log(req.body.email)
       const { otp } = require('./otp.js');
       
       const Otp = new otp({
@@ -61,9 +61,6 @@ const database = async () => {
     const { caregivers_patient } = require('./caregivers_associated_patients.js');
 
     try {
-      console.log(req.body.otp)
-      console.log(req.body.email_paziente)
-      console.log(req.body.email_caregiver)
 
       const match = await otp.findOne({email:req.body.email_paziente, otp: req.body.otp})
       console.log(match)

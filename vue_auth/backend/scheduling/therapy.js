@@ -8,6 +8,8 @@ const schema = new mongoose.Schema({
   orario: String
 });
 
+schema.index({ paziente: 1 });
+
 
 const terapia = mongoose.model('therapy', schema);
 module.exports = { terapia };
