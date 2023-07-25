@@ -1,4 +1,4 @@
-    const NUM_THREADS = 10;
+    const NUM_THREADS = 80;
     const { Worker, isMainThread, parentPort } = require('worker_threads'); 
 
 
@@ -31,7 +31,7 @@
       }
     
       // Wait for all worker threads to finish their tasks and gather their results
-      const results = await Promise.all(workerPromises);
+      const results = await Promise.allSettled(workerPromises);
     
       // Log the results
       console.log('All threads completed their work.');
@@ -43,6 +43,6 @@
       try {
         simulateThreads();
       } catch (error) {
-        console.log(error)
+        console.log('Main thread error:', error);
       }
     }

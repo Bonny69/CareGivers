@@ -38,7 +38,7 @@ let locks = {
     let timesLogin = []
 
     const promises = [];
-    
+    //for(i=0;i<50;i++){
     promises.push(login().then((time) =>{
       acquireLock('isAddingElementLogin')
       timesLogin.push(time)
@@ -104,6 +104,7 @@ let locks = {
       timesInsertPvs.push(time)
       releaseLock('isAddingElementTimesInsertPvs')
     }));
+  //}
     
 
   // Wait for all the promises to complete
@@ -124,7 +125,7 @@ let locks = {
   let resultLogin = calculateAverage(timesLogin);
   let resultCheckOtp = calculateAverage(timesCheckOtp)
 
-  result = [
+  const result = [
     resultMemo,
     resultDrug,
     resultDeleteDrug,
@@ -330,7 +331,7 @@ async function checkOtp() {
   const data = {
     otp: '10000',
     email_paziente: '771c2c3afda9151482bee26ec7052f88',
-    email_caregiver: '3cf69e2d70eedc2100b8d2b303d49792',
+    email_caregiver: generateRandomString('20'),
   };
   try {
     const startTime = Date.now();
@@ -396,8 +397,9 @@ async function insertPvs() {
   }
 }
 
-function acquireLock(lockName){
+async function acquireLock(lockName) {
   while (locks[lockName]) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
   }
   locks[lockName] = true;
 }
@@ -406,6 +408,9 @@ function releaseLock(lockName) {
   locks[lockName] = false;
 }
 
+async function run() {
+  await executeMethods();
+}
 
-executeMethods()
+run();
   
