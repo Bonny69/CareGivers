@@ -639,13 +639,13 @@ hr {
 .container-farmaci {
   width: 1100px;
   text-align: center;
-  margin-top: 260px;
+  margin-top: 350px;
   margin-left: 150px;
 }
 .container-task {
   width: 1100px;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 80px;
   margin-left: 150px;
 }
 
@@ -676,7 +676,8 @@ hr {
 
 .table-farmaci td,
 .table-task td {
-  padding: 8px;
+  padding: 6px;
+  font-size: large;
   text-align: center;
   border: 1px solid #dddddd;
 }

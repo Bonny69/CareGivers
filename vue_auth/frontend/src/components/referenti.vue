@@ -75,7 +75,7 @@
       v-if="isPatient()"
       style="background-color: #6200ee; color: white; padding: 70px"
     >
-      <h1>Genera OTP:</h1>
+      <h1 style="color: white">Genera OTP:</h1>
       <br />
       <input type="submit" @click="createOtp()" value="GENERA" />
     </div>
