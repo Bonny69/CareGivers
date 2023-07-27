@@ -163,8 +163,9 @@ async function connectToMongoDB() {
     const secondDate = new Date(req.body.secondDate + 'T23:59:59.999Z');
 
     try {
+      const collezione = req.body.collection
       const db = client.db('alerts')
-      const collection = db.collection(req.body.collezione)
+      const collection = db.collection(collezione)
 
       const result = await collection.aggregate([
         {
