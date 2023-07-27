@@ -30,6 +30,7 @@
     "jsonschema": "^1.2.6",
     "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.4",
+    "mongodb": "3.7",
     "mongoose": "^6.10.0",
     "mqtt": "^4.3.7",
     "node-polyfill-webpack-plugin": "^2.0.1",
