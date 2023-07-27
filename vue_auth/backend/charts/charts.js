@@ -147,7 +147,7 @@ async function connectToMongoDB() {
 
   app.post('/getLastValue', async (req,res) => {
     try {
-      const collezione = req.body.collezione
+      const collezione = req.body.collection
       const db = client.db('alerts')
       const collection = db.collection(collezione)
       const result = await collection.findOne({}, { sort: { _id: -1 } })
