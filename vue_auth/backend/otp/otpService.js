@@ -3,38 +3,45 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
 mongoose.set('strictQuery', false);
+const router = require('express').Router();
 const app = express()
 const port = process.env.port || 5001;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
-
-const {connectToAssociazioniCollection} = require('../auth/db')
 const { otp } = require('./otp.js');
 const { patient_caregivers } = require('./patient_associated_caregivers.js');
 const { caregivers_patient } = require('./caregivers_associated_patients.js');
 
 
-connectToAssociazioniCollection().then(() => {
-  app.listen(port,(err) => {
-    if(err)
-        console.log(err);
-    console.log('server running on port ' + port);
-})
-})
+
+const database = async () => {
+    try {
+       await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/associazioni?retryWrites=true&w=majority')
+      console.log('DB connected')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  database().then(()=>{
+    app.listen(port,(err) => {
+      if(err)
+          console.log(err);
+   
+      console.log('server running on port ' + port);
+  })
+  });
 
   app.post('/insertOtp', async (req,res) =>{
-    console.log('DENTRO INSERT OTP SERVER')
     try{
       const Otp = new otp({
         email: req.body.email,
         otp: req.body.otp
       })
-
       const response = await Otp.save()
       console.log(response)
-
       res.status(200).json({message: 'otp generato correttamente'})
       }catch(error){
         console.log(error)
@@ -45,7 +52,6 @@ connectToAssociazioniCollection().then(() => {
 
   app.post('/checkOtp', async (req,res) => {
     console.log('DENTRO CHECK OTP SERVER')
-
     try {
       const match = await otp.findOne({email:req.body.email_paziente, otp: req.body.otp})
       console.log(match)
@@ -75,7 +81,7 @@ connectToAssociazioniCollection().then(() => {
   })
 
   app.post('/home',  async (req, res) => {
-
+    console.log('dentro home server');
     try {
       const result = await caregivers_patient.find({caregiver: req.body.email_caregiver});
       return res.json(result);

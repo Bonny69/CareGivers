@@ -3,27 +3,46 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
 mongoose.set('strictQuery', false);
-
-
 const app = express()
 const port = process.env.port || 5002;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
-
-const {connectToSchedulingCollection} = require('../auth/db')
 const { Memo } = require('./schedule.js')
 const { terapia } = require('./therapy.js')
 const {caregivers_patient} = require('../otp/caregivers_associated_patients')
 
-connectToSchedulingCollection().then(()=> {
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority";
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function connectToMongoDB() {
+  try {
+    await client.connect();
+    
+    console.log("connected to MongoDB!");
+    return client; 
+  } catch (error) {
+    console.log("Failed to connect to MongoDB:", error);
+    throw error;
+  }
+}
+
+ connectToMongoDB().then(()=>{
   app.listen(port,(err) => {
     if(err)
         console.log(err);
     console.log('server running on port ' + port);
+  })
 })
-});
 
 
   app.post('/insertMemo', async (req,res) => {
@@ -36,10 +55,8 @@ connectToSchedulingCollection().then(()=> {
           minutes: parseInt(minutesString, 10),
         };
         const selectedDate = new Date(dataMemo.getFullYear(), dataMemo.getMonth(), dataMemo.getDate(), selectedTime.hours, selectedTime.minutes);
-
         const timeDiffInSeconds = Math.floor((selectedDate.getTime() - new Date()) / 1000);
-        console.log(timeDiffInSeconds + ' DIFFERENZA SECONDI')
-
+        
         const schedule = new Memo({
           paziente: req.body.email_paziente,                      
           evento: req.body.evento,
@@ -49,25 +66,28 @@ connectToSchedulingCollection().then(()=> {
           expires: timeDiffInSeconds
         })
 
-        await schedule.save();
+        const db = client.db('schedule')
+        const collection = db.collection('schedules')
+        await collection.insertOne(schedule)
         return res.status(200).json({
           message: 'inserimento promemoria avvenuto con successo'
         })
-
-    } catch (error) {
+    }catch (error) {
         console.log(error)
         return res.status(400).json({
           message: 'errore'
         })
     }
-
   })
 
 
   app.get('/getMemos', async (req,res) => {
     console.log(req.query.email)
     try {
-      const documents = await Memo.find({paziente: req.query.email});
+      const db = client.db('schedule')
+      const collection = db.collection('schedules')
+      const documents = await collection.find({paziente: req.query.email}).toArray();
+      console.log(documents)
       res.json(documents)
     } catch (error) {
       console.log(err);
@@ -85,8 +105,10 @@ connectToSchedulingCollection().then(()=> {
         dosaggio: req.body.dosaggio,
         paziente: req.body.email_paziente
       })
+      const db = client.db('schedule')
+      const collection = db.collection('therapy')
 
-      await farmaci.save()
+      await collection.insertOne(farmaci)
 
       return res.status(200).json({
         message: 'farmaco inserito correttamente'
@@ -103,7 +125,10 @@ connectToSchedulingCollection().then(()=> {
     console.log(req.query.email)
 
     try { 
-      const documents = await terapia.find({paziente: req.query.email});
+      const db = client.db('schedule')
+      const collection = db.collection('therapy')
+      const documents = await collection.find({paziente: req.query.email}).toArray();
+      console.log(documents)
       res.json(documents)
     } catch (error) {
       console.log(err);
@@ -117,7 +142,9 @@ connectToSchedulingCollection().then(()=> {
     console.log(req.body.email)
 
     try {
-      const result = await Memo.deleteOne({paziente: req.body.email, evento: req.body.evento})
+      const db = client.db('schedule')
+      const collection = db.collection('schedules')
+      const result = await collection.deleteOne({paziente: req.body.email, evento: req.body.evento})
       console.log(result)
       return res.status(200).json({message: 'evento cancellato correttamente'})
     } catch (error) {
@@ -132,7 +159,9 @@ connectToSchedulingCollection().then(()=> {
     console.log(req.body.email)
 
     try {
-      const result = await terapia.deleteOne({paziente: req.body.email, farmaco: req.body.farmaco})
+      const db = client.db('schedule')
+      const collection = db.collection('therapy')
+      const result = await collection.deleteOne({paziente: req.body.email, farmaco: req.body.farmaco})
       console.log(result)
       return res.status(200).json({message: 'farmaco cancellato correttamente'})
     } catch (error) {
@@ -141,20 +170,6 @@ connectToSchedulingCollection().then(()=> {
           return;
     }
   })
-
-
-  app.post('/editTask', async (req,res) => {
-    try {
-      const result = await Memo.updateOne({paziente: req.body.email, evento: req.body.evento})
-      console.log(result)
-      return res.status(200).json({message: 'memo modificato correttamente'})
-    } catch (error) {
-      console.log(err);
-          res.status(500).json({ message: 'Internal server error' });
-          return;
-    }
-  })
-
 
   app.post('/getEmailPatient', async(req,res)=>{
     console.log('dentro get email paziente server')

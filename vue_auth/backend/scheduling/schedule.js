@@ -10,5 +10,5 @@ const memoSchema = new mongoose.Schema({
 memoSchema.index({ paziente: 1 });
 
 
-const Memo = mongoose.model('schedule', memoSchema);
+const Memo = mongoose.model('schedules', memoSchema);
 module.exports = { Memo };

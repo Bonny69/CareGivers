@@ -11,24 +11,46 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cors());
-
-const {connectToAlertsCollection} = require('../auth/db')
 const {parameters} = require('./parameters.js')
 const {alerts} = require('./alerts.js')
 
-connectToAlertsCollection().then(() => {
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority";
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function connectToMongoDB() {
+  try {
+    await client.connect();
+    
+    console.log("connected to MongoDB!");
+    return client; 
+  } catch (error) {
+    console.log("Failed to connect to MongoDB:", error);
+    throw error;
+  }
+}
+
+ connectToMongoDB().then(()=>{
   app.listen(port,(err) => {
     if(err)
         console.log(err);
     console.log('server running on port ' + port);
-})
+  })
 })
 
     app.get('/getData', async (req,res) => {
       const field = req.query.field
       const field2 = req.query.field2
       try {
-       const collection = mongoose.connection.db.collection('dataset')
+        const datasetDB = client.db('careGivers')
+        const collection = datasetDB.collection('dataset')
 
         if(req.query.field === 'HR'){
         const minValue = 50;
@@ -42,7 +64,6 @@ connectToAlertsCollection().then(() => {
             const minValue = 85;
             const maxValue = 99;
             const randomValue = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
-            console.log(randomValue)
             const document = await collection.findOne({[field]: {$gt: randomValue}});
             res.json(document)
           }else{
@@ -68,8 +89,9 @@ connectToAlertsCollection().then(() => {
     app.post('/getAlerts', async(req,res) => {
       console.log(req.body)
       try {
-        const result = await alerts.findOne({patient: req.body.email})
-        console.log(result)
+        const db = client.db('alerts')
+        const collection = db.collection('alerts')
+        const result = await collection.findOne({patient: req.body.email})
         if(result){
           res.status(200).json(result)
         }else{
@@ -82,6 +104,8 @@ connectToAlertsCollection().then(() => {
 
     app.post('/insertAlerts', async(req,res) => {
       try{
+        const db = client.db('alerts')
+        const collection = db.collection('alerts')
         const alert = new alerts({
          patient: req.body.email,
           fc : req.body.fc,
@@ -89,9 +113,7 @@ connectToAlertsCollection().then(() => {
           systolic: req.body.systolic,
           diastolic: req.body.diastolic
       })
-      const response = await alert.save()
-      console.log(response)
-
+      await collection.insertOne(alert)
       res.status(200).json({message: 'alert inseriti correttamente'})
     }catch(error){
       console.log(error)
@@ -105,7 +127,8 @@ connectToAlertsCollection().then(() => {
     try {
       const collezione= req.body.collection
 
-      const collection = mongoose.connection.db.collection(collezione)
+      const db = client.db('alerts')
+      const collection = db.collection(collezione)
     
       const parameter = new parameters({
          fc : req.body.fc,
@@ -123,26 +146,25 @@ connectToAlertsCollection().then(() => {
 
 
   app.post('/getLastValue', async (req,res) => {
-    console.log(req.body)
     try {
-      const collection = mongoose.connection.db.collection(req.body.collection)
+      const db = client.db('alerts')
+      const collection = db.collection(req.body.collezione)
       const result = await collection.findOne({}, { sort: { _id: -1 } })
       res.json(result)
     } catch (error) {
       console.log(error)
-      res.status(500)
+      res.status(500).json()
     }
   })
 
 
   app.post('/getMedia', async (req,res) => {
-    console.log(req.body)
-
     const firstDate = new Date(req.body.firstDate + 'T00:00:00.000Z');
     const secondDate = new Date(req.body.secondDate + 'T23:59:59.999Z');
 
     try {
-      const collection = mongoose.connection.db.collection(req.body.collection)
+      const db = client.db('alerts')
+      const collection = db.collection(req.body.collezione)
 
       const result = await collection.aggregate([
         {
@@ -167,8 +189,6 @@ connectToAlertsCollection().then(() => {
           }
         }
       ]).toArray();
-      
-      console.log(result)
       res.json(result)
     } catch (error) {
       res.status(500).json({ error: 'An error occurred' });
