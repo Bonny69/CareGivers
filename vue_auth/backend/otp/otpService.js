@@ -11,12 +11,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 const {connectToAssociazioniCollection} = require('../auth/db')
-connectToAssociazioniCollection()
-
 const { otp } = require('./otp.js');
 const { patient_caregivers } = require('./patient_associated_caregivers.js');
 const { caregivers_patient } = require('./caregivers_associated_patients.js');
 
+
+connectToAssociazioniCollection().then(() => {
+  app.listen(port,(err) => {
+    if(err)
+        console.log(err);
+    console.log('server running on port ' + port);
+})
+})
 
   app.post('/insertOtp', async (req,res) =>{
     console.log('DENTRO INSERT OTP SERVER')
@@ -78,10 +84,3 @@ const { caregivers_patient } = require('./caregivers_associated_patients.js');
       return res.status(500).json({ error: 'An error occurred' });
     }
   });
-
-app.listen(port,(err) => {
-    if(err)
-        console.log(err);
- 
-    console.log('server running on port ' + port);
-})

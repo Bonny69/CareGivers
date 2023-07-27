@@ -1,18 +1,47 @@
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
-
-const uri = "mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority";
-
-const connectToMongoDB = async () => {
-  try {
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('Connected to MongoDB Atlas');
+// Function to connect to 'Users' collection
+const connectToUsersCollection = async () => {
+ try {
+    await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/Users?retryWrites=true&w=majority');
+    console.log('Connected to Users collection');
   } catch (error) {
-    console.error('Error connecting to MongoDB Atlas:', error);
+    console.log(error);
   }
 };
 
-module.exports = { connectToMongoDB };
+// Function to connect to 'associazioni' collection
+const connectToAlertsCollection = async () => {
+  try {
+   await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/alerts?retryWrites=true&w=majority');
+    console.log('Connected to alerts collection');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const connectToAssociazioniCollection = async () => {
+  try {
+   await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/associazioni?retryWrites=true&w=majority');
+    console.log('Connected to associazioni collection');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const connectToSchedulingCollection = async () => {
+  try {
+   await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/scheduling?retryWrites=true&w=majority');
+    console.log('Connected to scheduling collection');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+module.exports = {
+  connectToUsersCollection,
+  connectToAlertsCollection,
+  connectToAssociazioniCollection,
+  connectToSchedulingCollection
+};

@@ -15,11 +15,11 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 express.json()
-const {connectToMongoDB} = require('./db')
+const {connectToUsersCollection} = require('./db')
 const { user } = require('./user.js')
 
 
- connectToMongoDB().then(() => {
+ connectToUsersCollection().then(() => {
   app.listen(port,(err) => {
     if(err)
         console.log(err);
@@ -69,7 +69,7 @@ app.post('/user', async(req,res)=>{
 
 
 
-app.post('/login',  async(req,res) =>{
+app.post('/login', async(req,res) =>{
   try {
     const User = await user.findOne({ email: req.body.email });
     if(!User){

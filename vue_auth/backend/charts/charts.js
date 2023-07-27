@@ -12,11 +12,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cors());
 
-const {connectToMongoDB} = require('../auth/db')
+const {connectToAlertsCollection} = require('../auth/db')
 const {parameters} = require('./parameters.js')
 const {alerts} = require('./alerts.js')
 
-connectToMongoDB().then(() => {
+connectToAlertsCollection().then(() => {
   app.listen(port,(err) => {
     if(err)
         console.log(err);
@@ -28,18 +28,13 @@ connectToMongoDB().then(() => {
       const field = req.query.field
       const field2 = req.query.field2
       try {
-       // await client.connect();
-       // const database = client.db("careGivers");
-       // const collection = database.collection('dataset')
-       const db = mongoose.connection
-       const datasetDB = db.useDb('careGivers');
-       const datasetCollection = datasetDB.collection('dataset')
+       const collection = mongoose.connection.db.collection('dataset')
 
         if(req.query.field === 'HR'){
         const minValue = 50;
         const maxValue = 140;
         const randomValue = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
-        const document = await datasetCollection.findOne({[field]: {$gt: randomValue}});
+        const document = await collection.findOne({[field]: {$gt: randomValue}});
         res.json(document)
         }
         else{
@@ -48,7 +43,7 @@ connectToMongoDB().then(() => {
             const maxValue = 99;
             const randomValue = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
             console.log(randomValue)
-            const document = await datasetCollection.findOne({[field]: {$gt: randomValue}});
+            const document = await collection.findOne({[field]: {$gt: randomValue}});
             res.json(document)
           }else{
             const minValueSystolic = 90
@@ -57,7 +52,7 @@ connectToMongoDB().then(() => {
             const maxValueDyastolic = 95
             const randomValueSystolic = Math.floor(Math.random() * (maxValueSystolic - minValueSystolic + 1)) + minValueSystolic;
             const randomValueDyastolic = Math.floor(Math.random() * (maxValueDyastolic - minValueDyastolic + 1)) + minValueDyastolic;
-            const document = await datasetCollection.findOne({$and:[
+            const document = await collection.findOne({$and:[
               {[field]: {$gt: randomValueSystolic}},
               {[field2] : {$gt: randomValueDyastolic}}
             ]});
@@ -110,9 +105,7 @@ connectToMongoDB().then(() => {
     try {
       const collezione= req.body.collection
 
-      const db = mongoose.connection
-      const parameterDB = db.useDb('alerts');
-      const parametersCollection = parameterDB.collection(collezione)
+      const collection = mongoose.connection.db.collection(collezione)
     
       const parameter = new parameters({
          fc : req.body.fc,
@@ -121,7 +114,7 @@ connectToMongoDB().then(() => {
          diastolic: req.body.diastolic
      })
 
-     parametersCollection.insertOne(parameter)
+     collection.insertOne(parameter)
      res.status(200).json({message: 'parametri inseriti'})
     } catch (error) {
       console.log(error)
@@ -132,9 +125,7 @@ connectToMongoDB().then(() => {
   app.post('/getLastValue', async (req,res) => {
     console.log(req.body)
     try {
-      const db = mongoose.connection
-      const database = db.useDb('alerts');
-      const collection = database.collection(req.body.collection)
+      const collection = mongoose.connection.db.collection(req.body.collection)
       const result = await collection.findOne({}, { sort: { _id: -1 } })
       res.json(result)
     } catch (error) {
@@ -151,9 +142,7 @@ connectToMongoDB().then(() => {
     const secondDate = new Date(req.body.secondDate + 'T23:59:59.999Z');
 
     try {
-      const db = mongoose.connection
-      const database = db.useDb('alerts');
-      const collection = database.collection(req.body.collection)
+      const collection = mongoose.connection.db.collection(req.body.collection)
 
       const result = await collection.aggregate([
         {

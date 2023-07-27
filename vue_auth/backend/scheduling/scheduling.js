@@ -1,6 +1,4 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = 'mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority';
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -15,13 +13,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 const {connectToSchedulingCollection} = require('../auth/db')
-connectToSchedulingCollection();
 const { Memo } = require('./schedule.js')
 const { terapia } = require('./therapy.js')
+const {caregivers_patient} = require('../otp/caregivers_associated_patients')
+
+connectToSchedulingCollection().then(()=> {
+  app.listen(port,(err) => {
+    if(err)
+        console.log(err);
+    console.log('server running on port ' + port);
+})
+});
 
 
   app.post('/insertMemo', async (req,res) => {
-    console.log('DENTRO INSERT-MEMO SERVER')
     try {
         const dataMemo = new Date(req.body.data)
         
@@ -73,9 +78,6 @@ const { terapia } = require('./therapy.js')
 
 
   app.post('/insertTherapy', async(req,res) => {
-
-    console.log('DENTRO INSERT TERAPIA SERVER')
-
     try {
       const farmaci = new terapia({
         farmaco: req.body.farmaco,
@@ -142,9 +144,6 @@ const { terapia } = require('./therapy.js')
 
 
   app.post('/editTask', async (req,res) => {
-    console.log('DENTRO modifica task SERVER')
-    console.log(req.body.email)
-
     try {
       const result = await Memo.updateOne({paziente: req.body.email, evento: req.body.evento})
       console.log(result)
@@ -161,23 +160,11 @@ const { terapia } = require('./therapy.js')
     console.log('dentro get email paziente server')
     console.log(req.body.email)
     try {
-      await client.connect();
-        const database = client.db("associazioni");
-        const collection = database.collection('caregivers_patients')
-
-        const result = await collection.findOne({caregiver: req.body.email})
-
-        if(result)
-           res.status(200).json(result)
+      const result = await caregivers_patient.findOne({caregiver: req.body.email})
+      if(result)
+          res.status(200).json(result)
 
     } catch (error) {
       console.log(error)
     }
   })
-
-
-  app.listen(port,(err) => {
-    if(err)
-        console.log(err);
-    console.log('server running on port ' + port);
-})

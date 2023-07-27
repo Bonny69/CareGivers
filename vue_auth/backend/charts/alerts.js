@@ -11,5 +11,5 @@ const userSchema = new schema({
 
 userSchema.index({ patient: 1 });
 
-const alerts = mongoose.model('alerts',userSchema);
+const alerts = mongoose.model('alert',userSchema,);
 module.exports = { alerts };
