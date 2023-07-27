@@ -158,7 +158,6 @@ async function connectToMongoDB() {
     }
   })
 
-
   app.post('/getMedia', async (req,res) => {
     const firstDate = new Date(req.body.firstDate + 'T00:00:00.000Z');
     const secondDate = new Date(req.body.secondDate + 'T23:59:59.999Z');
