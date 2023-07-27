@@ -15,14 +15,20 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 express.json()
-const {connectToUsersCollection} = require('./db')
-connectToUsersCollection()
+const {connectToMongoDB} = require('./db')
 const { user } = require('./user.js')
 
 
+ connectToMongoDB().then(() => {
+  app.listen(port,(err) => {
+    if(err)
+        console.log(err);
+    console.log('server running on port ' + port);
+  })
+})
+
+
 app.post('/signup', async (req, res) => {
-  console.log('dentro signup server')
-  
     const newUser = new user({
         nome: req.body.nome,
         cognome: req.body.cognome,
@@ -64,7 +70,6 @@ app.post('/user', async(req,res)=>{
 
 
 app.post('/login',  async(req,res) =>{
-  
   try {
     const User = await user.findOne({ email: req.body.email });
     if(!User){
@@ -99,10 +104,3 @@ app.post('/login',  async(req,res) =>{
     });
   } 
 });
-
-
-app.listen(port,(err) => {
-    if(err)
-        console.log(err);
-    console.log('server running on port ' + port);
-})
