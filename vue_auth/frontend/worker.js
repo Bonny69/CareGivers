@@ -51,6 +51,8 @@
       let resultInsertPvs 
       let resultLogin 
       let resultCheckOtp 
+
+      for(i=0;i<20;i++){
       promises.push(login().then((time) =>{
         acquireLock('isAddingElementLogin')
         timesLogin.push(time)
@@ -107,6 +109,7 @@
         timesInsertPvs.push(time)
         releaseLock('isAddingElementTimesInsertPvs')
       }));
+    }
     
       
     await Promise.all(promises);
@@ -265,8 +268,8 @@
       const data = {
         email: '3cf69e2d70eedc2100b8d2b303d49792',
       };
-      const startTime = Date.now();
       try {
+        const startTime = Date.now();
         await axios.post("http://localhost:5000/user", data);
         const endTime = Date.now();
         return endTime - startTime;
@@ -381,7 +384,7 @@
       spO2: '98',
       systolic: '130',
       diastolic: '100',
-      collection: '771c2c3afda9151482bee26ec7052f98' + "/vitalparameters",
+      collection: generateRandomString(15) + "/vitalparameters",
     };
     try {
       const startTime = Date.now();
