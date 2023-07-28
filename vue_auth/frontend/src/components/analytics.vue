@@ -28,7 +28,7 @@ export default {
       chartInstanceFC: null,
       chartInstanceSpO2: null,
       chartInstanceBP: null,
-      isDataFetched: false, 
+      isDataFetched: false,
     };
   },
 
@@ -69,7 +69,7 @@ export default {
         this.fetchData("bp");
 
         this.extractObjectFromStorage();
-      }, 20000);
+      }, 1000);
     }
   },
 
@@ -331,7 +331,7 @@ export default {
   margin-left: 10%;
   display: flex;
   flex-direction: column;
-  gap: 70px; 
+  gap: 70px;
 }
 
 canvas {
