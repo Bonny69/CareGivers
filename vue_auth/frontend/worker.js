@@ -378,6 +378,30 @@
     }
   }
 
+  async function getMemos(){
+    const email = { email: '771c2c3afda9151482bee26ec7052f98'};
+    try {
+      const startTime = Date.now();
+      await axios.get("http://localhost:5002/getMemos", { params: email })
+      const endTime = Date.now();
+      return endTime - startTime;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getFarmaci(){
+    const email = { email: '771c2c3afda9151482bee26ec7052f98'};
+    try {
+      const startTime = Date.now();
+      await axios.get("http://localhost:5002/getTherapy", { params: email })
+      const endTime = Date.now();
+      return endTime - startTime;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function insertPvs() {
     let object = {
       fc: '120',
