@@ -69,7 +69,7 @@ export default {
         this.fetchData("bp");
 
         this.extractObjectFromStorage();
-      }, 1000);
+      }, 5000);
     }
   },
 

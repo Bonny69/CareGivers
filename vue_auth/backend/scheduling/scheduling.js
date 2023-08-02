@@ -90,7 +90,7 @@ async function connectToMongoDB() {
       console.log(documents)
       res.json(documents)
     } catch (error) {
-      console.log(err);
+      console.log(error);
           res.status(500).json({ message: 'Internal server error' });
           return;
     }

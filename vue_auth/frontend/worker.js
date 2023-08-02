@@ -11,8 +11,8 @@
       isAddingElementDeleteDrug : false,
       isAddingElementDeleteTask : false,
       isAddingElementGetMedia : false,
-      isAddingElementGetPazientiHome : false,
-      isAddingElementGetInfoUser : false,
+      isAddingElementgetMemos : false,
+      isAddingElementGetFarmaci: false,
       isAddingElementTimesInsertAlerts : false,
       isAddingElementTimesCreateOtp : false,
       isAddingElementCheckOtp : false,
@@ -21,136 +21,82 @@
       isAddingElementLogin : false
     }
 
-    let timesinsertMemo = []
       let timesinsertDrug = []
-      let timesdeleteDrug  = []
-      let timesDeleteTask = []
       let timesGetMedia = []
-      let timesGetPazientiHome = []
-      let timesGetInfoUser = []
       let timesInsertAlerts = []
-      let timesCreateOtp = []
-      let timesCheckOtp = []
-      let timesGetDataFromMongoDb = []
+      let timesGetMemos = []
       let timesInsertPvs = []
-      let timesLogin = []
 
     async function executeMethods(){
       const promises = [];
 
-      let resultMemo 
       let resultDrug 
-      let resultDeleteDrug 
-      let resultDeleteTask 
       let resultGetMedia 
-      let resultgetPazientiHome 
-      let resultGetInfoUser 
       let resultInsertAlerts 
-      let resultcreateOtp 
-      let resultGetDataFromMongoDb 
       let resultInsertPvs 
-      let resultLogin 
-      let resultCheckOtp 
+      let resultGetMemos
+     
 
-      for(i=0;i<20;i++){
-      promises.push(login().then((time) =>{
-        acquireLock('isAddingElementLogin')
-        timesLogin.push(time)
-        releaseLock('isAddingElementLogin')
-      }))
-      promises.push(getInfoUser().then((time) => {
-        acquireLock('isAddingElementGetInfoUser')
-        timesGetInfoUser.push(time)
-        releaseLock('isAddingElementGetInfoUser')
-      }));
-      promises.push(createOtp().then((time) => {
-        acquireLock('isAddingElementTimesCreateOtp')
-        timesCreateOtp.push(time)
-        releaseLock('isAddingElementTimesCreateOtp')
-      }));
-      promises.push(checkOtp().then((time) =>{
-        acquireLock('isAddingElementCheckOtp')
-        timesCheckOtp.push(time)
-        otp++;
-        releaseLock('isAddingElementCheckOtp')
-      }));
-      promises.push(getPazientiHome().then((time) =>{ 
-        acquireLock('isAddingElementGetPazientiHome')
-        timesGetPazientiHome.push(time)
-        releaseLock('isAddingElementGetPazientiHome')
-      }))
-      promises.push(insertMemo().then((time) =>{
-        acquireLock('isAddingElementMemo')
-        timesinsertMemo.push(time)
-        releaseLock('isAddingElementMemo')
-      }));
-      promises.push(insertDrug().then((time) =>{
-        acquireLock('isAddingElementInserDrug')
-        timesinsertDrug.push(time)
-        releaseLock('isAddingElementInserDrug')
-        }));
-      promises.push(getMedia().then((time) =>{
-        acquireLock('isAddingElementGetMedia')
-        timesGetMedia.push(time)
-        releaseLock('isAddingElementGetMedia')
-      }));
       promises.push(insertAlerts().then((time) =>{
         acquireLock('isAddingElementTimesInsertAlerts')
         timesInsertAlerts.push(time)
         releaseLock('isAddingElementTimesInsertAlerts')
       }));
-      promises.push(getDataFromMongoDb().then((time) =>{
-        acquireLock('isAddingElementGetDataFromMongoDb')
-        timesGetDataFromMongoDb.push(time)
-        releaseLock('isAddingElementGetDataFromMongoDb')
-      }));
-      promises.push(insertPvs().then((time) =>{
-        acquireLock('isAddingElementTimesInsertPvs')
-        timesInsertPvs.push(time)
-        releaseLock('isAddingElementTimesInsertPvs')
-      }));
-    }
+      promises.push(wait(1000).then(() => insertDrug().then((time) => {
+        acquireLock('isAddingElementInserDrug');
+        timesinsertDrug.push(time);
+        releaseLock('isAddingElementInserDrug');
+      })));
     
+      promises.push(wait(100).then(() => getMedia().then((time) => {
+        acquireLock('isAddingElementGetMedia');
+        timesGetMedia.push(time);
+        releaseLock('isAddingElementGetMedia');
+      })));
+    
+      promises.push(wait(100).then(() => insertPvs().then((time) => {
+        acquireLock('isAddingElementTimesInsertPvs');
+        timesInsertPvs.push(time);
+        releaseLock('isAddingElementTimesInsertPvs');
+      })));
+    
+      promises.push(wait(1000).then(() => getMemos().then((time) => {
+        acquireLock('isAddingElementgetMemos');
+        timesGetMemos.push(time);
+        releaseLock('isAddingElementgetMemos');
+      })));
       
     await Promise.all(promises);
 
-    resultMemo = calculateAverage(timesinsertMemo);
     resultDrug = calculateAverage(timesinsertDrug);
-    resultDeleteDrug = calculateAverage(timesdeleteDrug);
-    resultDeleteTask = calculateAverage(timesDeleteTask);
     resultGetMedia = calculateAverage(timesGetMedia);
-    resultgetPazientiHome = calculateAverage(timesGetPazientiHome);
-    resultGetInfoUser = calculateAverage(timesGetInfoUser);
-    resultInsertAlerts = calculateAverage(timesInsertAlerts);
-    resultcreateOtp = calculateAverage(timesCreateOtp);
-    resultGetDataFromMongoDb = calculateAverage(timesGetDataFromMongoDb);
     resultInsertPvs = calculateAverage(timesInsertPvs);
-    resultLogin = calculateAverage(timesLogin);
+    resultGetMemos = calculateAverage(timesGetMemos);
+    resultInsertAlerts = calculateAverage(timesInsertAlerts)
 
     const result = [
-      resultMemo,
       resultDrug,
       resultGetMedia,
-      resultgetPazientiHome,
-      resultGetInfoUser,
-      resultInsertAlerts,
-      resultcreateOtp,
-      resultCheckOtp ,
-      resultGetDataFromMongoDb,
+      resultGetMemos,
       resultInsertPvs,
-      resultLogin
+      resultInsertAlerts
     ];
     parentPort.postMessage({ result });
+  }
+
+  function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   function calculateAverage(arr) {
       if (!Array.isArray(arr) || arr.length === 0) {
         return 0;
       }
-    
       let sum = 0;
       for (let i = 0; i < arr.length; i++) {
+        if(arr[i] != -1){
         sum += arr[i];
+        }
       }
     
       const average = sum / arr.length;
@@ -173,7 +119,7 @@
               evento: 'guardia medica' + numeroTask++,
               data: '12/01/2023',
               orario: '15:56',
-              email_paziente: '771c2c3afda9151482bee26ec7052f98',
+              email_paziente: generateRandomString(10),
             };
       try {
           const startTime = Date.now()
@@ -190,7 +136,7 @@
         farmaco: 'aulin' + numeroDrug++,
         orario: '16:50',
         dosaggio: '150',
-        email_paziente: '771c2c3afda9151482bee26ec7052f98',
+        email_paziente: generateRandomString(10),
       };
       const startTime = Date.now();
       try {
@@ -199,44 +145,14 @@
         return endTime - startTime;
       } catch (error) {
         console.log(error);
+        return -1;
       }
-    }
-    
-    async function deleteDrug() {
-      const medicinale = {
-        farmaco: 'aulin' + --numeroDrug,
-        email: '771c2c3afda9151482bee26ec7052f98',
-      };
-      const startTime = Date.now();
-      try {
-        await axios.post("http://localhost:5002/deleteDrug", medicinale);
-        const endTime = Date.now();
-        return endTime - startTime;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    
-    async function deleteTask() {
-      const task = {
-        evento: 'guardia medica' + --numeroTask,
-        email: '771c2c3afda9151482bee26ec7052f98',
-      };
-      const startTime = Date.now();
-      try {
-        await axios.post("http://localhost:5002/deleteTask", task);
-        const endTime = Date.now();
-        return endTime - startTime;
-      } catch (error) {
-        console.log(error);
-      }
-      numeroTask++;
     }
     
     async function getMedia() {
       const data = {
         collection: '771c2c3afda9151482bee26ec7052f98' + '/vitalparameters',
-        firstDate: '27/07/2023',
+        firstDate: '31/07/2023',
         secondDate: '24/08/2023',
         parametro: 'fc',
       };
@@ -247,6 +163,7 @@
         return endTime - startTime;
       } catch (error) {
         console.log(error);
+        return -1;
       }
     }
     
@@ -295,6 +212,7 @@
         return endTime - startTime;
       } catch (error) {
         console.log(error);
+        return -1;
       }
     }
     
@@ -387,6 +305,7 @@
       return endTime - startTime;
     } catch (error) {
       console.log(error);
+      return -1;
     }
   }
 
@@ -408,7 +327,7 @@
       spO2: '98',
       systolic: '130',
       diastolic: '100',
-      collection: generateRandomString(15) + "/vitalparameters",
+      collection: 'testing' + "/vitalparameters",
     };
     try {
       const startTime = Date.now();
@@ -417,6 +336,7 @@
       return endTime - startTime;
     } catch (error) {
       console.log(error);
+      return -1;
     }
   }
 

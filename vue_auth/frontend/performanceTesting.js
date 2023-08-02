@@ -1,5 +1,5 @@
-    const NUM_THREADS = 5;
-    const { Worker, isMainThread, parentPort } = require('worker_threads'); 
+    const NUM_THREADS = 220;
+    const { Worker, isMainThread} = require('worker_threads'); 
 
 
     function createWorker() {
@@ -13,6 +13,7 @@
 
     async function simulateThreads() {
       const workerPromises = [];
+      let risultati = [];
     
       for (let i = 0; i < NUM_THREADS; i++) {
         const worker = createWorker();
@@ -21,22 +22,43 @@
         // Wrap the worker event handling in a promise and push it to the workerPromises array
         const workerPromise = new Promise((resolve) => {
           worker.on('message', (message) => {
-            const result = message.result
+            const result = message.result;
             console.log('Result from the worker thread:', result);
-            resolve()
+            resolve(result); // Resolve the promise with the result array
           });
         });
     
         workerPromises.push(workerPromise);
       }
     
-      // Wait for all worker threads to finish their tasks and gather their results
-      const results = await Promise.allSettled(workerPromises);
-    
-      // Log the results
-      console.log('All threads completed their work.');
-      console.log('Results:', results);
+      try {
+        const resultArrays = await Promise.all(workerPromises);
+        const numWorkers = resultArrays.length;
+        const numElements = resultArrays[0].length;
+      
+        // Calculate the sum of values at each index of all arrays and the count of valid elements
+        const { sumArray, validCounts } = resultArrays.reduce(
+          (acc, curr) => {
+            curr.forEach((val, i) => {
+              if (val !== 0) {
+                acc.sumArray[i] += val;
+                acc.validCounts[i]++;
+              }
+            });
+            return acc;
+          },
+          { sumArray: new Array(numElements).fill(0), validCounts: new Array(numElements).fill(0) }
+        );
+      
+        // Calculate the average for each index
+        const averageArray = sumArray.map((sum, i) => (validCounts[i] > 0 ? sum / validCounts[i] : 0));
+      
+        console.log('Average value for every index:', averageArray);
+      } catch (error) {
+        console.error('Error while processing worker promises:', error);
+      }
     }
+      
 
 
     if (isMainThread) {
