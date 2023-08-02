@@ -19,12 +19,11 @@
         const worker = createWorker();
         worker.postMessage({ i });
     
-        // Wrap the worker event handling in a promise and push it to the workerPromises array
         const workerPromise = new Promise((resolve) => {
           worker.on('message', (message) => {
             const result = message.result;
             console.log('Result from the worker thread:', result);
-            resolve(result); // Resolve the promise with the result array
+            resolve(result); 
           });
         });
     
@@ -36,7 +35,6 @@
         const numWorkers = resultArrays.length;
         const numElements = resultArrays[0].length;
       
-        // Calculate the sum of values at each index of all arrays and the count of valid elements
         const { sumArray, validCounts } = resultArrays.reduce(
           (acc, curr) => {
             curr.forEach((val, i) => {
@@ -50,7 +48,6 @@
           { sumArray: new Array(numElements).fill(0), validCounts: new Array(numElements).fill(0) }
         );
       
-        // Calculate the average for each index
         const averageArray = sumArray.map((sum, i) => (validCounts[i] > 0 ? sum / validCounts[i] : 0));
       
         console.log('Average value for every index:', averageArray);
