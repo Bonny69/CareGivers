@@ -55,8 +55,6 @@
         console.error('Error while processing worker promises:', error);
       }
     }
-      
-
 
     if (isMainThread) {
       try {
