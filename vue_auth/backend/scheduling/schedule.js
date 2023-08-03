@@ -7,6 +7,8 @@ const memoSchema = new mongoose.Schema({
   orario: String,
 });
 
+memoSchema.index({ paziente: 1 });
 
-const Memo = mongoose.model('schedule', memoSchema);
+
+const Memo = mongoose.model('schedules', memoSchema);
 module.exports = { Memo };

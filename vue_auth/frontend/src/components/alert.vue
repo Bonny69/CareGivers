@@ -137,7 +137,7 @@ export default {
           secondDate: this.endDate,
           parametro: this.parametro,
         };
-        console.log(data);
+        //console.log(data);
         axios.post("http://localhost:5005/getMedia", data).then((res) => {
           if (res.status === 200) {
             const stringa = parseInt(res.data[0].averageField) + "/min";

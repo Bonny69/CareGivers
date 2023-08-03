@@ -7,5 +7,7 @@ const userSchema = new schema({
     createdAt: {type: Date, default: Date.now, expires: 120}
 });
 
+userSchema.index({ email: 1 });
+
 const otp = mongoose.model('otp',userSchema);
 module.exports = { otp };

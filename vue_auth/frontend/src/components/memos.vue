@@ -284,7 +284,7 @@ export default {
 
               const topic = sessionStorage.getItem("email_paziente") + "/task";
 
-              console.log(topic + " TOPIC TASK MQTT");
+              //console.log(topic + " TOPIC TASK MQTT");
               this.client.publish(topic, JSON.stringify(memoCiphered));
               alert("promemoria inserito correttamente");
             }
@@ -538,7 +538,6 @@ export default {
         .get("http://localhost:5002/getMemos", { params: email })
         .then((response) => {
           const documents = response.data;
-
           if (documents.length > 0) {
             for (let i = 0; i < documents.length; i++) {
               const promemoria = {

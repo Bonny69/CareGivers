@@ -1,36 +1,51 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = 'mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority';
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors');
 mongoose.set('strictQuery', false);
-const router = require('express').Router();
-
-
 const app = express()
 const port = process.env.port || 5002;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
+const { Memo } = require('./schedule.js')
+const { terapia } = require('./therapy.js')
+const {caregivers_patient} = require('../otp/caregivers_associated_patients')
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority";
 
-
-const database = async () => {
-    try {
-       await mongoose.connect('mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/scheduling?retryWrites=true&w=majority')
-      console.log('DB connected')
-    } catch (error) {
-      console.log(error)
-    }
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
   }
-  database();
+});
+
+async function connectToMongoDB() {
+  try {
+    await client.connect();
+    
+    console.log("connected to MongoDB!");
+    return client; 
+  } catch (error) {
+    console.log("Failed to connect to MongoDB:", error);
+    throw error;
+  }
+}
+
+ connectToMongoDB().then(()=>{
+  app.listen(port,(err) => {
+    if(err)
+        console.log(err);
+    console.log('server running on port ' + port);
+  })
+})
 
 
   app.post('/insertMemo', async (req,res) => {
-    console.log('DENTRO INSERT-MEMO SERVER')
     try {
         const dataMemo = new Date(req.body.data)
         
@@ -40,11 +55,8 @@ const database = async () => {
           minutes: parseInt(minutesString, 10),
         };
         const selectedDate = new Date(dataMemo.getFullYear(), dataMemo.getMonth(), dataMemo.getDate(), selectedTime.hours, selectedTime.minutes);
-
         const timeDiffInSeconds = Math.floor((selectedDate.getTime() - new Date()) / 1000);
-        console.log(timeDiffInSeconds + ' DIFFERENZA SECONDI')
-        const { Memo } = require('./schedule.js')
-
+        
         const schedule = new Memo({
           paziente: req.body.email_paziente,                      
           evento: req.body.evento,
@@ -54,29 +66,31 @@ const database = async () => {
           expires: timeDiffInSeconds
         })
 
-        await schedule.save();
+        const db = client.db('schedule')
+        const collection = db.collection('schedules')
+        await collection.insertOne(schedule)
         return res.status(200).json({
           message: 'inserimento promemoria avvenuto con successo'
         })
-
-    } catch (error) {
+    }catch (error) {
         console.log(error)
         return res.status(400).json({
           message: 'errore'
         })
     }
-
   })
 
 
   app.get('/getMemos', async (req,res) => {
-    const { Memo } = require('./schedule.js')
     console.log(req.query.email)
     try {
-      const documents = await Memo.find({paziente: req.query.email});
+      const db = client.db('schedule')
+      const collection = db.collection('schedules')
+      const documents = await collection.find({paziente: req.query.email}).toArray();
+      console.log(documents)
       res.json(documents)
     } catch (error) {
-      console.log(err);
+      console.log(error);
           res.status(500).json({ message: 'Internal server error' });
           return;
     }
@@ -84,10 +98,6 @@ const database = async () => {
 
 
   app.post('/insertTherapy', async(req,res) => {
-
-    console.log('DENTRO INSERT TERAPIA SERVER')
-    const { terapia } = require('./therapy.js')
-
     try {
       const farmaci = new terapia({
         farmaco: req.body.farmaco,
@@ -95,8 +105,10 @@ const database = async () => {
         dosaggio: req.body.dosaggio,
         paziente: req.body.email_paziente
       })
+      const db = client.db('schedule')
+      const collection = db.collection('therapy')
 
-      await farmaci.save()
+      await collection.insertOne(farmaci)
 
       return res.status(200).json({
         message: 'farmaco inserito correttamente'
@@ -110,11 +122,13 @@ const database = async () => {
 
   app.get('/getTherapy', async (req,res) => {
     console.log('DENTRO GET-Therapy SERVER')
-    const { terapia } = require('./therapy.js')
     console.log(req.query.email)
 
     try { 
-      const documents = await terapia.find({paziente: req.query.email});
+      const db = client.db('schedule')
+      const collection = db.collection('therapy')
+      const documents = await collection.find({paziente: req.query.email}).toArray();
+      console.log(documents)
       res.json(documents)
     } catch (error) {
       console.log(err);
@@ -125,11 +139,12 @@ const database = async () => {
 
 
   app.post('/deleteTask', async (req,res) => {
-   const { Memo } = require('./schedule.js')
     console.log(req.body.email)
 
     try {
-      const result = await Memo.deleteOne({paziente: req.body.email, evento: req.body.evento})
+      const db = client.db('schedule')
+      const collection = db.collection('schedules')
+      const result = await collection.deleteOne({paziente: req.body.email, evento: req.body.evento})
       console.log(result)
       return res.status(200).json({message: 'evento cancellato correttamente'})
     } catch (error) {
@@ -141,11 +156,12 @@ const database = async () => {
 
 
   app.post('/deleteDrug', async (req,res) => {
-   const { terapia } = require('./therapy.js')
     console.log(req.body.email)
 
     try {
-      const result = await terapia.deleteOne({paziente: req.body.email, farmaco: req.body.farmaco})
+      const db = client.db('schedule')
+      const collection = db.collection('therapy')
+      const result = await collection.deleteOne({paziente: req.body.email, farmaco: req.body.farmaco})
       console.log(result)
       return res.status(200).json({message: 'farmaco cancellato correttamente'})
     } catch (error) {
@@ -155,45 +171,15 @@ const database = async () => {
     }
   })
 
-
-  app.post('/editTask', async (req,res) => {
-    console.log('DENTRO modifica task SERVER')
-    const { Memo } = require('./schedule.js')
-    console.log(req.body.email)
-
-    try {
-      const result = await Memo.updateOne({paziente: req.body.email, evento: req.body.evento})
-      console.log(result)
-      return res.status(200).json({message: 'memo modificato correttamente'})
-    } catch (error) {
-      console.log(err);
-          res.status(500).json({ message: 'Internal server error' });
-          return;
-    }
-  })
-
-
   app.post('/getEmailPatient', async(req,res)=>{
     console.log('dentro get email paziente server')
     console.log(req.body.email)
     try {
-      await client.connect();
-        const database = client.db("associazioni");
-        const collection = database.collection('caregivers_patients')
-
-        const result = await collection.findOne({caregiver: req.body.email})
-
-        if(result)
-           res.status(200).json(result)
+      const result = await caregivers_patient.findOne({caregiver: req.body.email})
+      if(result)
+          res.status(200).json(result)
 
     } catch (error) {
       console.log(error)
     }
   })
-
-
-  app.listen(port,(err) => {
-    if(err)
-        console.log(err);
-    console.log('server running on port ' + port);
-})

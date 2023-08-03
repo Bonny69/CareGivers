@@ -9,5 +9,7 @@ const userSchema = new schema({
     diastolic: String
 });
 
-const alerts = mongoose.model('alerts',userSchema);
+userSchema.index({ patient: 1 });
+
+const alerts = mongoose.model('alert',userSchema,);
 module.exports = { alerts };
