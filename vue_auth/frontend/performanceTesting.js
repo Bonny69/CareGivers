@@ -1,4 +1,4 @@
-    const NUM_THREADS = 190;
+    const NUM_THREADS = 50;
     const { Worker, isMainThread} = require('worker_threads'); 
 
 
