@@ -152,8 +152,8 @@
     async function getMedia() {
       const data = {
         collection: '771c2c3afda9151482bee26ec7052f98' + '/vitalparameters',
-        firstDate: '31/07/2023',
-        secondDate: '24/08/2023',
+        firstDate: '03/08/2023',
+        secondDate: '04/08/2023',
         parametro: 'fc',
       };
       const startTime = Date.now();
