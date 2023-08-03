@@ -538,14 +538,15 @@ export default {
         .get("http://localhost:5002/getMemos", { params: email })
         .then((response) => {
           const documents = response.data;
-
-          for (let i = 0; i < documents.length; i++) {
-            const promemoria = {
-              evento: decrypt(documents[i].evento),
-              orario: decrypt(documents[i].orario),
-              data: documents[i].data.substr(0, 10),
-            };
-            this.tasks.push(promemoria);
+          if (documents.length > 0) {
+            for (let i = 0; i < documents.length; i++) {
+              const promemoria = {
+                evento: decrypt(documents[i].evento),
+                orario: decrypt(documents[i].orario),
+                data: documents[i].data.substr(0, 10),
+              };
+              this.tasks.push(promemoria);
+            }
           }
         });
     },
@@ -558,13 +559,15 @@ export default {
         .then((response) => {
           const documents = response.data;
 
-          for (let i = 0; i < documents.length; i++) {
-            const farmaco = {
-              farmaco: decrypt(documents[i].farmaco),
-              orario: decrypt(documents[i].orario),
-              dosaggio: documents[i].dosaggio,
-            };
-            this.terapia.push(farmaco);
+          if (documents.length > 0) {
+            for (let i = 0; i < documents.length; i++) {
+              const farmaco = {
+                farmaco: decrypt(documents[i].farmaco),
+                orario: decrypt(documents[i].orario),
+                dosaggio: documents[i].dosaggio,
+              };
+              this.terapia.push(farmaco);
+            }
           }
         });
     },
@@ -635,13 +638,13 @@ hr {
 .container-farmaci {
   width: 1100px;
   text-align: center;
-  margin-top: 260px;
+  margin-top: 350px;
   margin-left: 150px;
 }
 .container-task {
   width: 1100px;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 80px;
   margin-left: 150px;
 }
 
@@ -672,7 +675,8 @@ hr {
 
 .table-farmaci td,
 .table-task td {
-  padding: 8px;
+  padding: 6px;
+  font-size: large;
   text-align: center;
   border: 1px solid #dddddd;
 }

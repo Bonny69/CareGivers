@@ -22,7 +22,7 @@ export default {
   <router-link :to="to" class="link" :class="{ active: isActive }">
     <i class="icon" :class="icon"></i>
     <Transition name="fade">
-      <span v-if="!collapsed"> </span>
+      <span v-if="!collapsed"><slot></slot> </span>
     </Transition>
   </router-link>
 </template>
