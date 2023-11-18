@@ -154,7 +154,7 @@ export default {
         otp: encrypt(otp),
         email: sessionStorage.getItem("email"),
       };
-      axios.post("http://localhost:5001/insertOtp", data).then(
+      axios.post("http://localhost:5003/insertOtp", data).then(
         (res) => {
           console.log(res.data);
           if (res.status === 200) {
@@ -180,12 +180,12 @@ export default {
         email_caregiver: sessionStorage.getItem("email"),
       };
 
-      axios.post("http://localhost:5001/checkOtp", data).then(
+      axios.post("http://localhost:5003/checkOtp", data).then(
         (res) => {
           console.log(res.data);
           if (res.status === 200) {
             alert("associazione confermata");
-            localStorage.setItem("email_paziente", this.e_mail);
+            localStorage.setItem("email_paziente", this.e_mail_paziente);
           }
         },
         (err) => {

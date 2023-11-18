@@ -236,7 +236,7 @@
     };
     const startTime = Date.now();
     try {
-      await axios.post("http://localhost:5001/insertOtp", data);
+      await axios.post("http://localhost:5003/insertOtp", data);
       const endTime = Date.now();
       return endTime - startTime;
     } catch (error) {
@@ -252,7 +252,7 @@
     };
     try {
       const startTime = Date.now();
-      await axios.post("http://localhost:5001/checkOtp", data);
+      await axios.post("http://localhost:5003/checkOtp", data);
       const endTime = Date.now();
       return endTime - startTime;
     } catch (error) {

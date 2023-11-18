@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 const { Memo } = require('./schedule.js')
 const { terapia } = require('./therapy.js')
-const {caregivers_patient} = require('../otp/caregivers_associated_patients')
+const {caregivers_patient} = require('./caregivers_associated_patients.js')
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://user:user@caregivers.rgfjqts.mongodb.net/?retryWrites=true&w=majority";
