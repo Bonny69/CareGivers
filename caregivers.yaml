@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: caregivers
+  name: caregivers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caregivers
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: caregivers
+    spec:
+      containers: 
+        - image: bonny69/caregivers:frontend
+          name: caregivers-frontend
+          resources: {}
+          ports:
+            - containerPort: 8080
+        - image: bonny69/caregivers:auth
+          name: caregivers-auth
+          resources: {}
+          ports:
+            - containerPort: 5000
+        - image: bonny69/caregivers:charts
+          name: caregivers-charts
+          resources: {}
+          ports:
+            - containerPort: 5001
+        - image: bonny69/caregivers:scheduling
+          name: caregivers-scheduling
+          resources: {}
+          ports:
+            - containerPort: 5002
+        - image: bonny69/caregivers:otp
+          name: caregivers-otp
+          resources: {}
+          ports:
+            - containerPort: 5003
+        - image: bonny69/caregivers:mqtt
+          name: caregivers-mqtt
+          resources: {}
+          ports:
+            - containerPort: 1234
+      
+status: {}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: caregivers
+spec:
+  selector:
+    app: caregivers
+  ports:
+  - protocol: TCP
+    name: caregivers-frontend
+    port: 8080
+    nodePort: 30080
+  - protocol: TCP
+    name: caregivers-auth
+    port: 5000
+    nodePort: 30081
+  - protocol: TCP
+    name: caregivers-charts
+    port: 5001
+    nodePort: 30082
+  - protocol: TCP
+    name: caregivers-scheduling
+    port: 5002
+    nodePort: 30083
+  - protocol: TCP
+    name: caregivers-otp
+    port: 5003
+    nodePort: 30084
+  - protocol: TCP
+    name: caregivers-mqtt
+    port: 1234
+    nodePort: 30085
+  type: NodePort
+
