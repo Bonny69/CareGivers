@@ -105,10 +105,17 @@ export default {
       diastolic: "",
       client: null,
       topicAlert: sessionStorage.getItem("email_paziente") + "/insAlert",
+      interval: null
     };
   },
 
   created() {
+    this.interval=setTimeout(
+      function(){
+        this.$router.push({path: "/home"});
+      }.bind(this),
+      30000
+    )
     if (sessionStorage.getItem("token") === null) {
       alert("non autorizzato");
       this.$router.push("/login");
@@ -154,7 +161,7 @@ export default {
         otp: encrypt(otp),
         email: sessionStorage.getItem("email"),
       };
-      axios.post("http://localhost:5003/insertOtp", data).then(
+      axios.post("http://localhost:5001/insertOtp", data).then(
         (res) => {
           console.log(res.data);
           if (res.status === 200) {
@@ -180,7 +187,7 @@ export default {
         email_caregiver: sessionStorage.getItem("email"),
       };
 
-      axios.post("http://localhost:5003/checkOtp", data).then(
+      axios.post("http://localhost:5001/checkOtp", data).then(
         (res) => {
           console.log(res.data);
           if (res.status === 200) {
